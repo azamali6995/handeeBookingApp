@@ -1,18 +1,31 @@
 import { StyleSheet, Text, StatusBar, FlatList, Dimensions, TouchableOpacity, View, Image, ScrollView } from 'react-native'
-import React from 'react'
-import Header from '../../component/Header'
-
 import { FlatGrid, SectionGrid } from 'react-native-super-grid';
+import { PieChart } from "react-native-chart-kit";
+import React, { useEffect } from 'react'
+import Header from '../../component/Header'
+import { useSelector , useDispatch } from 'react-redux';
+import { userLoginSelector } from '../../redux/slice/authSlice';
+import { userPicker , } from '../../redux/slice/pickerSlice';
+import { userPacker  } from '../../redux/slice/packerSlice';
+import { userShipper } from '../../redux/slice/shipperSlice';
 
-import {
-    PieChart,
-  } from "react-native-chart-kit";
 import PieChartScreen from './chart/PieChartScreen';
 import BarChart from './chart/BarChart';
 
-
-
 const DashboradScreen = (props) => {
+  const dispatch = useDispatch();
+  const { userLoginPayload } = useSelector(userLoginSelector)
+    useEffect(()=>{
+     if(userLoginPayload?.data?.roleId == 2 ){
+      dispatch(userPicker())
+      }else if(userLoginPayload?.data?.roleId == 3){
+        dispatch(userPacker())
+      }else if(userLoginPayload?.data?.roleId == 4 ){
+        dispatch(userShipper())
+      }
+
+    },[userLoginPayload])
+
     const TotalOrder =[
        {
         packed : 'Orders Pending Fulfilment',
@@ -50,18 +63,17 @@ const DashboradScreen = (props) => {
         { label: 'Dec', value: 643 }
     ]
     const handleOrderScreen =(item)=>{
-        if(item?.id ==1){
-        props.navigation.navigate("PendingOrderScreen")
-        } else if(item?.id ==2){
-        props.navigation.navigate("PendingOrderScreen")
-        }else if(item?.id ==3){
-        props.navigation.navigate("PendingOrderScreen")    
-        }else {
-        props.navigation.navigate("PendingOrderScreen")    
-        }
-      }
-
-      const chartConfig = {
+        // if(item?.id ==1){
+        // props.navigation.navigate("PendingOrderScreen")
+        // } else if(item?.id ==2){
+        // props.navigation.navigate("PendingOrderScreen")
+        // }else if(item?.id ==3){
+        // props.navigation.navigate("PendingOrderScreen")    
+        // }else {
+        // props.navigation.navigate("PendingOrderScreen")    
+        // }
+    }
+    const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
         backgroundGradientTo: "#08130D",
@@ -70,7 +82,7 @@ const DashboradScreen = (props) => {
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
-      };  
+    };  
      
   return (
     <View style={{flex: 1, paddingHorizontal:10}}>

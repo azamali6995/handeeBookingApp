@@ -1,4 +1,4 @@
-import screens from './constants';
+import regex from './constants';
 import theme, { COLORS,COLORS1, SIZES, FONTS } from './theme';
 import images from './images';
 import icons from './icons';

@@ -1,24 +1,55 @@
 import {StyleSheet, Text, View, Image,TouchableOpacity, Platform, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '../../component/Button';
 import {COLORS, icons} from '../../constants';
 import TranslucentView from '../../component/MainInputView';
 import InputText from '../../component/Input';
 import CheckBox from '@react-native-community/checkbox';
+import { userLogin, userLoginSelector } from '../../redux/slice/authSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import { regex } from '../../constants/constants';
+import LoadingPage from '../../component/LoadingPage';
+
 
 const LoginScreen = (props) => {
+  const {navigation, route} = props;
+  const dispatch = useDispatch();
+  const { userLoginSuccess, userLoginFetching } = useSelector(userLoginSelector)
   const [secureText, setSecureText] = useState(true);
-  const [name, setName] = useState('');
-  const [pass, setPass] = useState('');
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [email, setEmail] = useState('Andrew@gmail.com');  // 2
+  const [password, setPassword] = useState('12345');
 
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+
+
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [emailError, setEmailError] = useState(false)
+  const [passwordlError, setPasswordlError] = useState(false)
+  const [loadig, setLoading] = useState(false);
+
+  useEffect(() => {
+    if(userLoginSuccess){
+      navigation.reset({index:0,routes:[{name:'DashboradScreen'}]})
+      } 
+  },[userLoginSuccess])
+  
   const handleLogin =()=>{
-    console.log("Helooooooo")
-    props.navigation.navigate("DashboradScreen")
+    if (!regex.email.test(email)) {
+      setEmailError(true);
+        return;
+      }
+    if (password.trim() === '') {
+      setPasswordlError(true);
+      return;
+    }
+    dispatch(userLogin({email, password}));
   }
- 
+
+
   return (
     <TranslucentView>
+      {userLoginFetching && <LoadingPage />}
       <View
         style={{
           flex:0.6,
@@ -48,7 +79,7 @@ const LoginScreen = (props) => {
       </View>
       <View style={{}}>
         <InputText
-          val={name}
+          val={email}
           edit={true}
           keyboardType="email-address"
           LeftIcon={icons.Email_Icon}
@@ -56,25 +87,34 @@ const LoginScreen = (props) => {
           bgStyle={{marginHorizontal: 5}}
           placeholder="Email"
           onChangeText={txt => {
-            setName(txt);
+            setEmail(txt);
+            setEmailError(false)
           }}
         />
+        {emailError && 
+          <Text style={{fontSize: 10, marginLeft:15,  color: 'red', fontFamily: 'Inter-Medium'}}>Please enter valid email</Text>
+        }
         <InputText
           edit={true}
-          val={pass}
+          val={password}
           keyboardType="email-address"
           LeftIcon={icons.Password_Icon}
           leftIconStyle={{backgroundColor: COLORS.white}}
           bgStyle={{marginHorizontal: 5}}
           placeholder="Password"
           onChangeText={txt => {
-            setPass(txt);
+            setPassword(txt);
+            setPasswordlError('')
           }}
           RightIcon={false}
           rightIconStyle={{backgroundColor: COLORS.white}}
         />
-        {/* <TextInput secureTextEntry={secureText}  style={{borderWidth:1,height:45}}/> */}
-        <View
+        {passwordlError && 
+          <Text style={{fontSize: 10,marginLeft:15, color: 'red', fontFamily: 'Inter-Medium'}}>Please enter password</Text>
+        }
+
+
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -115,7 +155,7 @@ const LoginScreen = (props) => {
             }}>
             Forgot Password?
           </Text>
-        </View>
+        </View> */}
 
         <Button
           buttonStyle={{borderRadius: 30,
@@ -132,7 +172,7 @@ const LoginScreen = (props) => {
         />
       </View>
       <View style={{flex: 0.5, alignItems:"center", justifyContent:"flex-end"}}>
-        <Text style={{fontFamily:"Inter-Regular"}}>Or via social media</Text>
+        {/* <Text style={{fontFamily:"Inter-Regular"}}>Or via social media</Text>
 
         <View style={{flexDirection:"row", alignItems:"center", marginTop:10}}>
          <TouchableOpacity style={{height:40, width:40,marginRight:10, borderRadius:20, backgroundColor:"#1877F2", alignItems:"center",justifyContent:"center"}}>
@@ -145,17 +185,17 @@ const LoginScreen = (props) => {
             style={{height:20, width:20,}}
            /> 
          </TouchableOpacity> 
-      </View>
+      </View> */}
       </View>
       
       <View style={{flex:1,alignItems:"center", justifyContent:"center",}}>
-          <View style={{flex:1,  }} />  
+          {/* <View style={{flex:1,  }} />  
           <View style={{flex:0.6, flexDirection:"row", }}>
           <Text style={{color:"#9C9C9C", fontSize:14,fontWeight:"400", fontFamily:"Inter-Medium"}}>Don’t have an account?</Text> 
           <TouchableOpacity>
             <Text style={{fontSize:16, color:"#2591CA", fontWeight:700, marginLeft:10, fontFamily:"Inter-Bold"}}>Sign Up</Text>
           </TouchableOpacity>
-          </View>  
+          </View>   */}
 
       </View>
     </TranslucentView>

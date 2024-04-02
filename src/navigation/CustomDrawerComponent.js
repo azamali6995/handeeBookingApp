@@ -10,7 +10,7 @@ import {
   Text
 } from 'react-native';
 import metrics from '../constants/metrics';
-import { responsiveWidth, responsiveHeight } from '../constants/responsive';
+import {responsiveWidth, responsiveHeight} from '../constants/responsive';
 
 import DrawerItem from './DrawerItems';
 
@@ -40,7 +40,6 @@ export default function CustomDrawerComponent(props) {
   }
  
   const handleLogOut = async() => {
-
   };
 
   const onPressDrawerItem = (data) => {
@@ -67,6 +66,7 @@ export default function CustomDrawerComponent(props) {
             <DrawerItem
               drawerItems={drawerItems}
               onPress={onPressDrawerItem}
+              navigation={navigation}
             />
           </View>
         <View style={[styles.LogoutContainer,{}]}>

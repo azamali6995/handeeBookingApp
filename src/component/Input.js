@@ -10,7 +10,7 @@ const Input = (props) => {
             </View>
 
             <TextInput
-                style={{ flex: 1, fontSize: 15, fontFamily: 'Inter_Regular',  marginLeft: 15 }}
+                style={{ flex: 1, fontSize: 15, fontFamily: 'Inter_Regular',  marginLeft: props.removePadding ? 0 : 15 }}
                 secureTextEntry={props.RightIcon&& secureText}
                 value={props.val}
                 placeholder={props.placeholder}
@@ -21,7 +21,7 @@ const Input = (props) => {
                 autoCorrect={false}
                 onChangeText={(txt) => handleonTextChange(txt)}
             />
-            <TouchableOpacity style={{ marginRight: 12,...props.rightIconStyle }} onPress={()=>{setSecureText(!secureText)}}>
+            <TouchableOpacity style={{ marginRight: props.removePadding ? 0 : 12,...props.rightIconStyle }} onPress={()=>{setSecureText(!secureText)}}>
             <Image source={props.RightIcon} style={{ height: 25, width: 25 }} />
             </TouchableOpacity>
 

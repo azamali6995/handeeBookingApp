@@ -10,13 +10,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.21.0",
-    "@react-native-community/checkbox": "^0.5.16",
+    "@react-native-async-storage/async-storage": "^1.22.3",
+    "@react-native-community/checkbox": "^0.5.17",
     "@react-native-community/cli-platform-android": "3.0.3",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/drawer": "^6.6.6",
     "@react-navigation/native": "^7.0.0-alpha.6",
     "@react-navigation/native-stack": "^7.0.0-alpha.7",
+    "@reduxjs/toolkit": "^2.2.1",
+    "axios": "^1.6.8",
     "d3": "^7.8.5",
     "jwt-decode": "^4.0.0",
     "prop-types": "^15.8.1",
@@ -35,7 +37,8 @@
     "react-native-super-grid": "^5.0.0",
     "react-native-svg": "^14.1.0",
     "react-native-svg-charts": "^5.4.0",
-    "react-native-vector-icons": "^10.0.3"
+    "react-native-vector-icons": "^10.0.3",
+    "react-redux": "^9.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

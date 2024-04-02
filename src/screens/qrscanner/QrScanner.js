@@ -1,54 +1,41 @@
-import React, { useEffect, useState } from "react";
-import QRCodeScanner from "react-native-qrcode-scanner";
-import jwt_decode from "jwt-decode";
-import { Platform, View, Text, StatusBar, Alert, Image, StyleSheet , TouchableOpacity, Modal} from "react-native";
-import Header from "../../component/Header";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StatusBar,
+  Alert,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+} from "react-native";
+import { Platform } from "react-native";
 import {
   requestMultiple,
-  RESULTS,
   openSettings,
   PERMISSIONS,
-  checkMultiple
 } from "react-native-permissions";
+import jwt_decode from "jwt-decode";
+import QRCodeScanner from "react-native-qrcode-scanner";
+import Header from "../../component/Header";
+import { useSelector, useDispatch } from "react-redux";
+import { boxScanning } from "../../redux/slice/boxScanningSlice";
 
-class QrScanner extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cameraPermissionDenied: false,
-      isCameraReady: false,
-      hasError: false,
-      showErrorModal: false,
-    };
-  }
+const QrScanner = () => {
+  const [cameraPermissionDenied, setCameraPermissionDenied] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
+
+  useEffect(() => {
     if (Platform.OS === "ios") {
-      this.getPermissions();
+      getPermissions();
     }
-  }
+  }, []);
 
-  componentDidCatch(error, errorInfo) {
-    console.error("Error caught in QrScanner:", error);
-    this.setState({ hasError: true });
-  }
-
-  onSuccess = (e) => {
-    try {
-      // Your existing code for handling QR code data
-      var decodedToken = jwt_decode(e.data);
-      console.log("DecodedData", decodedToken);
-
-      // ... (rest of your code)
-    }
-    catch (error) {
-      this.setState({ showErrorModal: true });
-    }
-  };
-
-  async  getPermissions(onDone) {
+  const getPermissions = async () => {
     await requestMultiple(
-
       Platform.select({
         android: [
           PERMISSIONS.ANDROID.CAMERA,
@@ -56,16 +43,12 @@ class QrScanner extends React.Component {
         ],
         ios: [PERMISSIONS.IOS.CAMERA],
       }),
-      
       {
         title: "360 Alert",
         message: "360 Alert would like access to your Storage ",
       }
     ).then((result) => {
-    console.log("azamali", result)
-
-      if (result["ios.permission.CAMERA"] == "blocked") {
-       
+      if (result["ios.permission.CAMERA"] === "blocked") {
         Alert.alert(
           "Grant camera Permission",
           "Allow Camera access from settings",
@@ -81,21 +64,20 @@ class QrScanner extends React.Component {
             },
           ]
         );
-      } else if (result["ios.permission.CAMERA"] == "granted") {
-        onDone(true);
       } else if (
-        result["android.permission.CAMERA"] == "granted" &&
-        result["android.permission.READ_EXTERNAL_STORAGE"] == "granted"
+        result["ios.permission.CAMERA"] === "granted" ||
+        (result["android.permission.CAMERA"] === "granted" &&
+          result["android.permission.READ_EXTERNAL_STORAGE"] === "granted")
       ) {
-        onDone(true);
+        setIsCameraReady(true);
       } else if (
-        result["android.permission.CAMERA"] == "denied" ||
-        result["android.permission.READ_EXTERNAL_STORAGE"] == "denied"
+        result["android.permission.CAMERA"] === "denied" ||
+        result["android.permission.READ_EXTERNAL_STORAGE"] === "denied"
       ) {
-        onDone(false);
+        setCameraPermissionDenied(true);
       } else if (
-        result["android.permission.CAMERA"] == "blocked" ||
-        result["android.permission.READ_EXTERNAL_STORAGE"] == "blocked"
+        result["android.permission.CAMERA"] === "blocked" ||
+        result["android.permission.READ_EXTERNAL_STORAGE"] === "blocked"
       ) {
         Alert.alert(
           "Grant camera Permission",
@@ -114,115 +96,129 @@ class QrScanner extends React.Component {
         );
       }
     });
-  }
+  };
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ fontSize: 18 }}>Something went wrong.</Text>
-        </View>
-      );
+  const onSuccess = (e) => {
+    try {
+      if (e.data !== undefined) {
+        handleBoxApi(e?.data);
+      } else {
+        setShowErrorModal(true);
+      }
+      // var decodedToken = jwt_decode(e.data);
+      // console.log("DecodedData", decodedToken);
+    } catch (error) {
+      setShowErrorModal(true);
+      
     }
+  };
 
-    return (
-      <View style={{ flex: 1, paddingHorizontal: 16 }}>
-        <StatusBar translucent={true} backgroundColor="black" barStyle={'dark-content'} />
-        <Header Left={true} Text={'Scan Item'} Right={true} Back={false} />
+  const handleBoxApi = (boxId) => {
+    dispatch(boxScanning(boxId))
+  };
 
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          {this.state.cameraPermissionDenied ? (
-            <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-              <Text style={{ fontSize: 18 }}>Camera not authorized</Text>
-            </View>
-          ) : (
-            <View style={{ flex: 1 }}>
-              { (
-                <QRCodeScanner
-                  cameraStyle={{ height: "100%" }}
-                  onRead={this.onSuccess}
-                />
-              )}
-            </View>
-          )}
+  return (
+    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+      <StatusBar
+        translucent={true}
+        backgroundColor="black"
+        barStyle={"dark-content"}
+      />
+      <Header Left={true} Text={"Scan Item"} Right={true} Back={false} />
+
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        {cameraPermissionDenied ? (
+          <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
+            <Text style={{ fontSize: 18 }}>Camera not authorized</Text>
           </View>
-                <Modal
-                  visible={this.state.showErrorModal}
-                  transparent={true}
-                  animationType="slide"
-                > 
-                  <View style={{flex:1, alignItems:"center", justifyContent:"center", paddingHorizontal:20}}>  
-                  <View style={styles.alertContainer}>
-                    <View style={[styles.header, { backgroundColor: "#2591CA" }]}>
-                      <Text style={styles.title}>Error</Text>
-                    </View>
-                    <View style={styles.body}>
-                      <Text style={{
-                        fontWeight: '500',
-                        fontFamily:"Inter-Medium",
-                        fontSize: 16,
-                        }}>
-                        Please scan the selected item</Text>
-                    </View>
-                    <TouchableOpacity style={[styles.okayButton,
-                         { backgroundColor: "#2591CA" }]} 
-                       onPress={()=>this.props.navigation.goBack()}>
-                      <Text style={styles.okayButtonText}>Okay</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  </View>
-                  
-                </Modal>
-
-
-
+        ) : (
+          <View style={{ flex: 1 }}>
+            {isCameraReady && (
+              <QRCodeScanner
+                cameraStyle={{ height: "100%" }}
+                onRead={onSuccess}
+              />
+            )}
+          </View>
+        )}
       </View>
-    );
-  }
-}
+      <Modal
+        visible={showErrorModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalContainer}>
+          <View style={[styles.alertContainer, { backgroundColor: "#fff" }]}>
+            <View style={[styles.header, { backgroundColor: "#2591CA" }]}>
+              <Text style={styles.title}>Error</Text>
+            </View>
+            <View style={styles.body}>
+              <Text style={styles.errorText}>Please scan the selected item</Text>
+            </View>
+            <TouchableOpacity
+              style={[styles.okayButton, { backgroundColor: "#2591CA" }]}
+              onPress={() => setShowErrorModal(false)}
+            >
+              <Text style={styles.okayButtonText}>Okay</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 export default QrScanner;
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
   alertContainer: {
-    backgroundColor: 'white',
     borderRadius: 10,
-    width: '100%',
-    justifyContent:'center',
+    width: "100%",
+    justifyContent: "center",
   },
   header: {
-    height:44,
+    height: 44,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    alignItems:"center",
-    justifyContent:"center"
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
-    color: 'white',
-    fontWeight: '500',
-    fontFamily:"Inter-Medium",
+    color: "white",
+    fontWeight: "500",
+    fontFamily: "Inter-Medium",
     fontSize: 16,
   },
   body: {
     paddingVertical: 20,
-    alignItems:"center",
-    justifyContent:"center"
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorText: {
+    fontWeight: "500",
+    fontFamily: "Inter-Medium",
+    fontSize: 16,
   },
   okayButton: {
     borderRadius: 5,
-    width:'40%',
-    height:40,
-    marginBottom:5,
-    alignSelf:"center",
-    alignItems:"center",
-    justifyContent:"center"
+    width: "40%",
+    height: 40,
+    marginBottom: 5,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   okayButtonText: {
-    color: 'white',
-    fontWeight: '500',
-    fontFamily:"Inter-Medium",
+    color: "white",
+    fontWeight: "500",
+    fontFamily: "Inter-Medium",
     fontSize: 16,
   },
 });
-

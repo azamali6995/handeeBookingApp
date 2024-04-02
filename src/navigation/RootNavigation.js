@@ -5,12 +5,12 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import DashboradScreen from '../screens/home/DashboradScreen';
-import OrderScreen from '../screens/order/OrderScreen';
 import PendingOrderScreen from '../screens/shipper/PendingOrderScreen';
 import CustomDrawerComponent from './CustomDrawerComponent';
 import OrderPackedScreen from '../screens/order/OrderPackedScreen';
 import OrderPickerScreen from '../screens/order/OrderPickerScreen';
 import QrScanner from '../screens/qrscanner/QrScanner';
+import OrderShippedScreen from '../screens/order/OrderShippedScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -53,14 +53,13 @@ export const RootNavigation = () => {
 export const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="DashboradScreen" component={DrawerNavigator} />
       <Stack.Screen name="OrderPickerScreen" component={OrderPickerScreen} />
-      <Stack.Screen name="QrScanner" component={QrScanner} />
       <Stack.Screen name="OrderPackedScreen" component={OrderPackedScreen} />
       <Stack.Screen name="PendingOrderScreen" component={PendingOrderScreen} />
-      <Stack.Screen name="OrderScreen" component={OrderScreen} />
+      <Stack.Screen name="OrderShippedScreen" component={OrderShippedScreen} />
+      <Stack.Screen name="QrScanner" component={QrScanner} />
     </Stack.Navigator>
   );
 };

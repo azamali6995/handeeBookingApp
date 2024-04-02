@@ -1,133 +1,91 @@
-  import {
-    StyleSheet,
-    Text,
-    StatusBar,
-    View,
-    FlatList,
-    TouchableOpacity,
-    Image,
-    ScrollView,
-  } from 'react-native';
-  import React, { useEffect, useState } from 'react';
-  import Header from '../../component/Header';
-  import Button from '../../component/Button';
-  import { useSelector , useDispatch } from 'react-redux';
-  import { markAsPicked } from '../../redux/slice/markAsPickedSlice';
-  import Checkbox from '../../component/Checkbox';
- 
+import {
+  StyleSheet,
+  Text,
+  StatusBar,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import Header from '../../component/Header';
+import Button from '../../component/Button';
+
+const OrderShippedScreen = (props) => {
+  const [dropDown, setDropDown] = useState(true) 
+  const [itemData, setItemData] = useState({})
+
+  useEffect(()=>{ 
+    setItemData(props?.route?.params?.item)
+  },[])
+
+  const BoxData = [
+    {
+      Box1: '1 Box',
+      Dimension: '64 x 64',
+      Weight: '2.3kg',
+    },
+    {
+      Box1: '1 Box',
+      Dimension: '64 x 64',
+      Weight: '2.3kg',
+    },
+  ];
+
+  const ItemData = [
+    {
+      CandyBox: 'Candy Box',
+      ItemNo: 1564,
+      Qty: 20,
+      ShipOrder: '20',
+      BioNo: 'B/O No',
+      SelfNo: 'Shel No',
+    },
+    {
+      CandyBox: 'Candy Box',
+      ItemNo: 1564,
+      Qty: 20,
+      ShipOrder: '20',
+      BioNo: 'B/O No',
+      SelfNo: 'Shel No',
+    },
+    {
+      CandyBox: 'Candy Box',
+      ItemNo: 1564,
+      Qty: 20,
+      ShipOrder: '20',
+      BioNo: 'B/O No',
+      SelfNo: 'Shel No',
+    },
+    {
+      Box1: '1 Box',
+      Dimension: '64 x 64',
+      Weight: '2.3kg',
+    },
+  ];
+
+  const handlPress =()=>{
+    setDropDown(!dropDown)
+  }   
+
+  const handleOrderAsShipped =()=>{
+    console.log('Add here')
+  }
 
 
-  const OrderPickerScreen = (props) => {
-    const dispatch = useDispatch();
-    const [dropDown, setDropDown] = useState(true) 
-    const [itemData, setItemData] = useState({})
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
-      const [isChecked, setChecked] = useState(false);
-
-
-    useEffect(()=>{ 
-      setItemData(props?.route?.params?.item)
-    },[])
-
-      console.log("itemData243523", itemData?.itemInOrderOutputDTOs )
-
-    const BoxData = [
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-      {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-      
-    ];
-  
-    const ItemData = [
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-    ];
-  
-    const handlPress =()=>{
-    //   setDropDown(!dropDown)
-    props.navigation.navigate("QrScanner")
-    }   
-  
-    const handleOrderAsShipped =()=>{
-      let body ={
-        pickingId : 0,
-        orderId:0,
-        pickerId:0,  
-        isPicked: true,
-        pickedDate:"2024-03-28T14:30:16.694Z",
-        itemId:0
-      }
-      dispatch(markAsPicked(body))
-    }
-  
-  
-    return (
-      <View style={{flex: 1, paddingHorizontal:16,}}>
-        <StatusBar
-          translucent={true}
-          backgroundColor="black"
-          barStyle={'dark-content'}
-        />
-        <Header Left={true} Text={'Orders Picker'} Right={true} Back={false} />
-        <ScrollView 
-        contentContainerStyle={{flexGrow: 1, paddingVertical:10}}
-        showsVerticalScrollIndicator={false}
-        >
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+  return (
+    <View style={{flex: 1, paddingHorizontal:16,}}>
+      <StatusBar
+        translucent={true}
+        backgroundColor="black"
+        barStyle={'dark-content'}
+      />
+      <Header Left={true} Text={'Orders Shipped'} Right={true} Back={false} />
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      style={{flexGrow : 1, paddingTop:10}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{paddingVertical: 10}}>
               <Text
                 style={{
@@ -168,7 +126,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.createdDate ? itemData?.createdDate : "null" }
+                 {itemData?.createdDate ? itemData?.createdDate.format("DD/MM/YYYY") : "null" }
               </Text>
             </View>
   
@@ -309,33 +267,120 @@
               </Text>
             </View>
           </View>
-  
+
+        <View style={{paddingVertical: 5 , flex:0.55}}>
+          <Text
+            style={{fontFamily: 'Inter-Bold', fontWeight: '700', fontSize: 24}}>
+            Boxes
+          </Text>
           <View
-              style={{borderWidth: 1, borderColor: '#CCCCCC', marginVertical:15}}
-            />
-            <View style={{flex:1}}>
-            <View style={{flexDirection: 'row', marginBottom:10, justifyContent: 'space-between'}}>
-              <Text
+            style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
+          />
+          <FlatList
+            data={BoxData}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={item => item.id}
+            ItemSeparatorComponent={() => {
+              return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
+            }}
+            renderItem={({item, index}) => (
+              <View
                 style={{
-                  fontFamily: 'Inter-Bold',
-                  fontWeight: '700',
-                  fontSize: 24,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  flexDirection: 'row',
+                  height: 60,
+                  flex:1
                 }}>
-                Items
-              </Text>
-              <TouchableOpacity 
-               style={{height:30, width:121, flexDirection:"row", justifyContent:"center", alignItems:"center", borderRadius:7, backgroundColor:"#2591CA" }}   
-               onPress={()=>handlPress()}  >
-                <Image
-                  source={require('../../assets/images/scan.png')}
-                  resizeMode='contain'
-                  style={{height: 20, width: 20, tintColor : "white", marginRight:10 }} />
-                <Text style={{fontFamily:'Inter-Regular', fontWeight:"400", color:'white', fontSize:10}}>Scanned Item</Text>
-              </TouchableOpacity>
-            </View>
-  
-                {console.log("itemDatapackingBoxDetailOutputDTOs", itemData?.packingBoxDetailOutputDTOs)}
-            <FlatList
+                <View style={{width: '30%'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-SemiBold',
+                      fontSize: 14,
+                      fontWeight: '600',
+                      color: '#2591CA',
+                    }}>
+                    1 Box
+                  </Text>
+                </View>
+
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-Medium',
+                      fontSize: 10,
+                      fontWeight: '500',
+                      color: '#778B9D',
+                    }}>
+                    Dimension:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-Medium',
+                      fontSize: 10,
+                      fontWeight: '500',
+                      marginLeft: 3,
+                      color: '#2591CA',
+                    }}>
+                    {item?.Dimension}
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-Medium',
+                      fontSize: 10,
+                      fontWeight: '500',
+                      color: '#778B9D',
+                    }}>
+                    Dimension:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-Medium',
+                      fontSize: 10,
+                      fontWeight: '500',
+                      marginLeft: 3,
+                      color: '#2591CA',
+                    }}>
+                    {item?.Weight}
+                  </Text>
+                </View>
+              </View>
+            )}
+          />
+          <View
+            style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
+          />
+
+                    </View>
+          <View style={{flex:1}}>
+          <View style={{flexDirection: 'row', paddingVetical:10, justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontFamily: 'Inter-Bold',
+                fontWeight: '700',
+                fontSize: 24,
+              }}>
+              Items
+            </Text>
+            <TouchableOpacity 
+             style={{height:30, width:40, justifyContent:"center", alignItems:"center", }}   
+             onPress={()=>handlPress()}  >
+              <Image
+                source={dropDown ?  
+                require('../../assets/images/downicon.png') 
+                :
+                require('../../assets/images/upicon.png') 
+                }
+                resizeMode='contain'
+                style={{height: 16, width: 16,}}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
               data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
@@ -423,8 +468,7 @@
                         </Text>
                       </View>
   
-                      
-                      <View style={{flexDirection: 'row',  marginVertical: 3}}>
+                      <View style={{flexDirection: 'row', marginVertical: 3}}>
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
@@ -458,7 +502,7 @@
                           }}>
                           {item?.boNumber ?? "N/A" }
                         </Text>
-                        {/* <Text
+                        <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
@@ -474,17 +518,8 @@
                             color: '#2591CA',
                           }}>
                           {item?.shelfNumber ?? "N/A" }
-                        </Text> */}
-                        
-                        <Checkbox
-                          isChecked={isChecked}
-                          onToggle={() => {
-                            setChecked(!isChecked);
-                          }}
-                        />
+                        </Text>
                       </View>
-
-
                     </View>
                   </View>
                   <View style={{marginVertical: 5}}>
@@ -515,37 +550,36 @@
                   </View>
                 </>
               )}
-            />     
-            </View>
-  
-          
-        </ScrollView>
-  
-        <View
-          style={{
-            paddingVertical: 10,
-            paddingHorizontal: 16,
-            justifyContent: 'center',
-          }}>
-          <Button
-            buttonStyle={{borderRadius: 10}}
-            title={'Mark order as Picked'}
-            LIcon={false}
-            LIconStyle={{marginLeft: 5}}
-            RIcon={false}
-            RIconStyle={{marginRight: 5}}
-            onPress={() => {
-              handleOrderAsShipped();
-            }}
-            disabled={false}
-            loading={false}
-          />
-        </View>
+            />      
+          </View>
+
+        
+      </ScrollView>
+
+      <View
+        style={{
+          paddingVertical: 10,
+          paddingHorizontal: 16,
+          justifyContent: 'center',
+        }}>
+        <Button
+          buttonStyle={{borderRadius: 10}}
+          title={'Mark order as Shipped'}
+          LIcon={false}
+          LIconStyle={{marginLeft: 5}}
+          RIcon={false}
+          RIconStyle={{marginRight: 5}}
+          onPress={() => {
+            handleOrderAsShipped();
+          }}
+          disabled={false}
+          loading={false}
+        />
       </View>
-    );
-  };
-  
-  export default OrderPickerScreen;
-  
-  const styles = StyleSheet.create({});
-  
+    </View>
+  );
+};
+
+export default OrderShippedScreen;
+
+const styles = StyleSheet.create({});
