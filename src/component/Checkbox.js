@@ -1,18 +1,27 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const Checkbox = ({ isChecked, onToggle }) => {
   return (
-    <TouchableOpacity onPress={onToggle}>
-       {isChecked ? (
-         <Icon name="checkbox-marked" size={20} color="#24B38A" />
-       ) : (
-         <Icon name="checkbox-blank-outline" size={20} color="#24B38A" />
-       )}
-     </TouchableOpacity>
+  <BouncyCheckbox
+  size={14}
+  fillColor="#3DD617"
+  unFillColor="#FFFFFF"
+  iconStyle={{ borderColor: "#3DD617" }}
+  innerIconStyle={{ borderWidth: 1 }}
+  textStyle={{ fontFamily: "JosefinSans-Regular" }}
+  onPress={(isChecked: boolean) => {console.log(isChecked)}}
+/>
   );
 };
 
-export default Checkbox;
+const styles = StyleSheet.create({
+  checkboxContainer: {
+    borderRadius: 10,
+    backgroundColor:"pink"
+  },
+});
 
+export default Checkbox;

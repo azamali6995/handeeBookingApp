@@ -424,7 +424,7 @@
                       </View>
   
                       
-                      <View style={{flexDirection: 'row',  marginVertical: 3}}>
+                      <View style={{flexDirection: 'row',  alignItems:"center", marginVertical: 3}}>
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
@@ -439,14 +439,14 @@
                             fontSize: 10,
                             color: '#2591CA',
                           }}>
-                          {item?.shipOrder ?? "N/A" }
+                          {item?.shipOrder?.substring(0, 3) ?? "N/A"}
                         </Text>
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
                             color: '#778B9D',
-                            marginLeft: 15,
+                            marginLeft: 10,
                           }}>
                           B/O NO:{' '}
                         </Text>
@@ -458,12 +458,12 @@
                           }}>
                           {item?.boNumber ?? "N/A" }
                         </Text>
-                        {/* <Text
+                        <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
                             color: '#778B9D',
-                            marginLeft: 15,
+                            marginLeft: 10,
                           }}>
                           Shelf NO:{' '}
                         </Text>
@@ -473,15 +473,17 @@
                             fontSize: 10,
                             color: '#2591CA',
                           }}>
-                          {item?.shelfNumber ?? "N/A" }
-                        </Text> */}
-                        
+                          {item?.shipOrder?.substring(0, 3) ?? "N/A"}
+                        </Text>
+                        <View style={{marginLeft:15, }}>
                         <Checkbox
                           isChecked={isChecked}
                           onToggle={() => {
                             setChecked(!isChecked);
                           }}
                         />
+                        </View>
+                        
                       </View>
 
 
