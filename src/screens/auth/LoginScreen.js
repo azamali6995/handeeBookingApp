@@ -16,8 +16,8 @@ const LoginScreen = (props) => {
   const dispatch = useDispatch();
   const { userLoginSuccess, userLoginFetching } = useSelector(userLoginSelector)
   const [secureText, setSecureText] = useState(true);
-  const [email, setEmail] = useState('Andrew@gmail.com');  // 2
-  const [password, setPassword] = useState('12345');
+  const [email, setEmail] = useState('orders@handeeproducts.com');  // 2
+  const [password, setPassword] = useState('1234');
 
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');

@@ -15,15 +15,17 @@ import BarChart from './chart/BarChart';
 const DashboradScreen = (props) => {
   const dispatch = useDispatch();
   const { userLoginPayload } = useSelector(userLoginSelector)
+  
     useEffect(()=>{
-     if(userLoginPayload?.data?.roleId == 2 ){
-      dispatch(userPicker())
-      }else if(userLoginPayload?.data?.roleId == 3){
-        dispatch(userPacker())
-      }else if(userLoginPayload?.data?.roleId == 4 ){
-        dispatch(userShipper())
-      }
-
+      userLoginPayload?.data?.rolesOutputDTO.map(item=>{
+        if(item.roleId == 2 ){
+          dispatch(userPicker())
+          }else if(item.roleId == 3){
+            dispatch(userPacker())
+          }else if(item.roleId == 4 ){
+            dispatch(userShipper())
+          }
+      })
     },[userLoginPayload])
 
     const TotalOrder =[

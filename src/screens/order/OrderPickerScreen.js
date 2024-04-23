@@ -15,21 +15,20 @@
   import { markAsPicked } from '../../redux/slice/markAsPickedSlice';
   import Checkbox from '../../component/Checkbox';
  
-
-
   const OrderPickerScreen = (props) => {
     const dispatch = useDispatch();
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
-      const [isChecked, setChecked] = useState(false);
+    const [isChecked, setChecked] = useState(false);
+    const [ScanData, setScanData] = useState([])
 
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
     },[])
 
-      console.log("itemData243523", itemData?.itemInOrderOutputDTOs )
+      console.log("itemData243523", itemData?.itemInOrderOutputDTOs?.length )
 
     const BoxData = [
       {
@@ -516,11 +515,8 @@
                     </Text> */}
                   </View>
                 </>
-              )}
-            />     
+              )}/>     
             </View>
-  
-          
         </ScrollView>
   
         <View

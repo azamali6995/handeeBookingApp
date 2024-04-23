@@ -46,7 +46,7 @@ export const userLoginSlice = createSlice({
     // ************ procedureConfigurations ******************
     builder
       .addCase(userLogin.fulfilled, (state, { payload }) => {
-        console.log("<======userAuth======>", payload?.data)
+        console.log("<======userAuth======>", payload?.data?.data?.rolesOutputDTO)
         state.userLoginPayload = payload.data;
         state.userLoginFetching = false;
         state.userLoginSuccess = true;

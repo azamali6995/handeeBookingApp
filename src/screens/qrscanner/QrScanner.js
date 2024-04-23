@@ -109,7 +109,6 @@ const QrScanner = () => {
       // console.log("DecodedData", decodedToken);
     } catch (error) {
       setShowErrorModal(true);
-      
     }
   };
 

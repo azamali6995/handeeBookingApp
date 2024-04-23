@@ -8,7 +8,9 @@ import { userPickerSelector } from '../../redux/slice/pickerSlice';
 import { userPackerSelector } from '../../redux/slice/packerSlice';
 import { userShipperSelector } from '../../redux/slice/shipperSlice';
 
-const PendingOrderScreen = (props) => {
+const PendingOrderScreen = ({navigation, route}) => {
+ console.log("routerouterouteroute", route.params)
+
   const dispatch = useDispatch();
   const {userLoginFetching, userLoginPayload} = useSelector(userLoginSelector)
   const {userPickerPayload,} = useSelector(userPickerSelector)
@@ -20,35 +22,31 @@ const PendingOrderScreen = (props) => {
   const [allOrder, setAllOrders] = useState([])
 
   useEffect(()=>{
-    if(userLoginPayload?.data?.roleId == 2){
-      if(userPickerPayload){
-        setAllOrders(userPickerPayload?.data)
-      } 
-    }else if(userLoginPayload?.data?.roleId == 3){
-      if(userPackerPayload){
-        setAllOrders(userPackerPayload?.data)
-      } 
-    }else if(userLoginPayload?.data?.roleId == 4){
-      if(userShipperPayload){
-        setAllOrders(userShipperPayload?.data)
-      } 
-    }
-  },[])
+        if(route.params?.pickerData?.roleId == 2){
+          if(userPickerPayload){
+            setAllOrders(userPickerPayload?.data)
+          } 
+        }else if(route.params?.packerData?.roleId == 3){
+          if(userPackerPayload){
+            setAllOrders(userPackerPayload?.data)
+          } 
+        }else if(route.params?.shippedData?.roleId == 4){
+          if(userShipperPayload){
+            setAllOrders(userShipperPayload?.data)
+          } 
+        }
 
-  console.log("<======allOrder=====>", userLoginPayload )
-  console.log("userPackerPayload=======>", userPackerPayload)
-  console.log("userShipperPayload=======>", userShipperPayload)
-
+  },[route.params])
 
 
   const handleSelectedItem = (item, index)=>{
-    console.log("SingleItem", item)
-    if(userLoginPayload?.data?.roleId == 2){
-       props.navigation.navigate("OrderPickerScreen",{item}) 
-    }else if(userLoginPayload?.data?.roleId == 3){
-      props.navigation.navigate("OrderPackedScreen",{ item}) 
-    } else if(userLoginPayload?.data?.roleId == 4){
-      props.navigation.navigate("OrderShippedScreen",{ item}) 
+
+    if(route.params?.pickerData?.roleId == 2){
+       navigation.navigate("OrderPickerScreen",{item}) 
+    }else if(route.params?.packerData?.roleId == 3){
+      navigation.navigate("OrderPackedScreen",{ item}) 
+    } else if(route.params?.shippedData?.roleId == 4){
+      navigation.navigate("OrderShippedScreen",{ item}) 
     }
   }
 

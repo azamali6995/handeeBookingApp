@@ -13,15 +13,15 @@ const DrawerItems = (props) => {
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-
-  const handlePicker =()=>{
-    navigation.navigate("PendingOrderScreen")
+  const handlePicker =(item)=>{
+    console.log("dataFrom", item)
+    navigation.navigate("PendingOrderScreen", {pickerData : item})
   }
-  const handleShipped =()=>{
-    navigation.navigate("PendingOrderScreen")
+  const handleShipped =(item)=>{
+    navigation.navigate("PendingOrderScreen", {shippedData : item})
   }
-  const handlePacker =()=>{
-    navigation.navigate("PendingOrderScreen")
+  const handlePacker =(item)=>{
+    navigation.navigate("PendingOrderScreen", {packerData : item})
   }
 
   return props.drawerItems.map((data, key) => {
@@ -67,27 +67,34 @@ const DrawerItems = (props) => {
           
         </View>
         {data?.title === 'Pending Order' && showDropdown && (
-          <View style={{ flexDirection: 'column', alignItems:"center",marginRight:28  }}>
-            {userLoginPayload?.data?.roleId == 2 ?  
-            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePicker()} }>
+          <View style={{flexDirection: 'column', alignItems:"center", marginRight:28}}>
+          {userLoginPayload?.data?.rolesOutputDTO.map(item =>{
+                return(
+            item?.roleId == 2 ?  
+            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePicker(item)} }>
               <Text style={{ color: '#fff' }}>Order to be Picked</Text>
             </TouchableOpacity>
             :
-            userLoginPayload?.data?.roleId == 4 ?  
-            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handleShipped()}}>
+            item?.roleId == 4 ?  
+            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handleShipped(item)}}>
               <Text style={{ color: '#fff' }}>Order to be Shipped</Text>
             </TouchableOpacity>
             :
-            userLoginPayload?.data?.roleId == 3 ?
-            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePacker()}}>
+            item?.roleId == 3 && 
+            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePacker(item)}}>
               <Text style={{ color: '#fff' }}>Order to be Packer</Text>
             </TouchableOpacity>
-             :
-             <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} >
-              <Text style={{ color: '#fff' }}>No role found</Text>
-            </TouchableOpacity>
+             
 
-            }
+            
+                )
+              
+
+            })}
+
+
+
+           
 
           </View>
         )}
