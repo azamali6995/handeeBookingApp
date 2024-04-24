@@ -14,21 +14,37 @@
   import { useSelector , useDispatch } from 'react-redux';
   import { markAsPicked } from '../../redux/slice/markAsPickedSlice';
   import Checkbox from '../../component/Checkbox';
+  import { useFocusEffect } from '@react-navigation/native';
+
  
   const OrderPickerScreen = (props) => {
+    const {navigation, route} = props
+    const {qrScanningCount} = useSelector(state => state?.ScanningCount);
+    console.log("qrScanningCount234234234", qrScanningCount.length)
+
     const dispatch = useDispatch();
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isChecked, setChecked] = useState(false);
     const [ScanData, setScanData] = useState([])
+    const [btnEnable, setBtnEnable] = useState(false)
 
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
     },[])
 
-      console.log("itemData243523", itemData?.itemInOrderOutputDTOs?.length )
+    useFocusEffect(
+      React.useCallback(() => {
+        if (itemData?.itemInOrderOutputDTOs?.length === qrScanningCount?.length) {
+          setBtnEnable(true);
+        } else {
+          setBtnEnable(false);
+        }
+      }, [itemData, qrScanningCount])
+    );
+
 
     const BoxData = [
       {
@@ -114,6 +130,7 @@
     }
   
   
+
     return (
       <View style={{flex: 1, paddingHorizontal:16,}}>
         <StatusBar
@@ -333,7 +350,7 @@
               </TouchableOpacity>
             </View>
   
-                {console.log("itemDatapackingBoxDetailOutputDTOs", itemData?.packingBoxDetailOutputDTOs)}
+                {/* {console.log("itemDatapackingBoxDetailOutputDTOs", itemData?.itemInOrderOutputDTOs)} */}
             <FlatList
               data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
               keyExtractor={item => item.id}
@@ -518,7 +535,8 @@
               )}/>     
             </View>
         </ScrollView>
-  
+
+        {btnEnable && 
         <View
           style={{
             paddingVertical: 10,
@@ -539,6 +557,7 @@
             loading={false}
           />
         </View>
+        }
       </View>
     );
   };

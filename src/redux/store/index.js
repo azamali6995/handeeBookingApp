@@ -7,6 +7,10 @@ import { userShipperSlice } from '../slice/shipperSlice';
 import { boxScanningSlice } from '../slice/boxScanningSlice'
 import { markAsPickedSlice } from '../slice/markAsPickedSlice';
 
+import {totalCount} from '../slice/QrCodeSlice'
+
+
+
 const store = configureStore({
   reducer: {
     auth: userLoginSlice.reducer,
@@ -15,7 +19,10 @@ const store = configureStore({
     packer: userPackerSlice.reducer,
     shipper: userShipperSlice.reducer,
     boxScan: boxScanningSlice.reducer,
-    markPicked: markAsPickedSlice.reducer
+    markPicked: markAsPickedSlice.reducer,
+    ScanningCount: totalCount
+
+
   },
 });
 

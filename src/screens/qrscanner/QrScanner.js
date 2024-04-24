@@ -19,8 +19,11 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import Header from "../../component/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { boxScanning } from "../../redux/slice/boxScanningSlice";
+import { CountTotalScanning } from '../../redux/slice/QrCodeSlice'
 
-const QrScanner = () => {
+
+const QrScanner = ({navigation, route}) => {
+
   const [cameraPermissionDenied, setCameraPermissionDenied] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -100,11 +103,9 @@ const QrScanner = () => {
 
   const onSuccess = (e) => {
     try {
-      if (e.data !== undefined) {
+      if (e?.data) {
         handleBoxApi(e?.data);
-      } else {
-        setShowErrorModal(true);
-      }
+      } 
       // var decodedToken = jwt_decode(e.data);
       // console.log("DecodedData", decodedToken);
     } catch (error) {
@@ -113,7 +114,11 @@ const QrScanner = () => {
   };
 
   const handleBoxApi = (boxId) => {
-    dispatch(boxScanning(boxId))
+    console.log("boxId====>",boxId)
+    // dispatch(boxScanning(boxId))
+
+    dispatch(CountTotalScanning(boxId))
+    navigation.goBack()
   };
 
   return (
@@ -156,8 +161,10 @@ const QrScanner = () => {
             </View>
             <TouchableOpacity
               style={[styles.okayButton, { backgroundColor: "#2591CA" }]}
-              onPress={() => setShowErrorModal(false)}
-            >
+              onPress={() => {
+                setShowErrorModal(false),
+                navigation.goBack()  
+                }}>
               <Text style={styles.okayButtonText}>Okay</Text>
             </TouchableOpacity>
           </View>
