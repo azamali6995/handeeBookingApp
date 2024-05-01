@@ -102,6 +102,7 @@ const QrScanner = ({navigation, route}) => {
   };
 
   const onSuccess = (e) => {
+    console.log("ScanData", e)
     try {
       if (e?.data) {
         handleBoxApi(e?.data);

@@ -5,7 +5,7 @@ import {COLORS, icons} from '../../constants';
 import TranslucentView from '../../component/MainInputView';
 import InputText from '../../component/Input';
 import CheckBox from '@react-native-community/checkbox';
-import { userLogin, userLoginSelector } from '../../redux/slice/authSlice';
+import { userLogin, clearUserState, userLoginSelector } from '../../redux/slice/authSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import { regex } from '../../constants/constants';
 import LoadingPage from '../../component/LoadingPage';
@@ -30,6 +30,7 @@ const LoginScreen = (props) => {
 
   useEffect(() => {
     if(userLoginSuccess){
+      dispatch(clearUserState());
       navigation.reset({index:0,routes:[{name:'DashboradScreen'}]})
       } 
   },[userLoginSuccess])

@@ -23,7 +23,6 @@ export const userLogin = createAsyncThunk(
 
 
 const initialState = {
-    
   //For UserLogin
   userLoginFetching: false,
   userLoginSuccess: false,
@@ -37,7 +36,10 @@ export const userLoginSlice = createSlice({
   initialState: initialState,
   reducers: {
     clearUserState: (state, actions) => {
-      return {...initialState};
+       state.userLoginFetching = false
+       state.userLoginFail = false
+       state.userLoginMessage = ''
+       state.userLoginSuccess = false
     },
   },
   

@@ -5,6 +5,7 @@ import { userLoginSelector } from '../redux/slice/authSlice';
 
 
 const DrawerItems = (props) => {
+  console.log("props345345r34", userLoginPayload)
   const {navigation, } = props
   const { userLoginPayload } = useSelector(userLoginSelector)
   const [showDropdown, setShowDropdown] = useState(false);

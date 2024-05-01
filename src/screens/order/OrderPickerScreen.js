@@ -13,15 +13,16 @@
   import Button from '../../component/Button';
   import { useSelector , useDispatch } from 'react-redux';
   import { markAsPicked } from '../../redux/slice/markAsPickedSlice';
+  import { pickedMarkByPickerList, pickedMarkByPickerListSelector } from '../../redux/slice/pickedMarkByPickerList';
+
   import Checkbox from '../../component/Checkbox';
   import { useFocusEffect } from '@react-navigation/native';
 
- 
   const OrderPickerScreen = (props) => {
     const {navigation, route} = props
     const {qrScanningCount} = useSelector(state => state?.ScanningCount);
-    console.log("qrScanningCount234234234", qrScanningCount.length)
 
+    const {pickedMarkByPickerListFetching} = useSelector(pickedMarkByPickerListSelector)
     const dispatch = useDispatch();
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
@@ -30,10 +31,16 @@
     const [ScanData, setScanData] = useState([])
     const [btnEnable, setBtnEnable] = useState(false)
 
-
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
     },[])
+
+    useEffect(()=>{
+      if(pickedMarkByPickerListFetching == true){
+        navigation?.navigate("DashboradScreen")
+      }
+    },[pickedMarkByPickerListFetching])
+
 
     useFocusEffect(
       React.useCallback(() => {
@@ -44,92 +51,25 @@
         }
       }, [itemData, qrScanningCount])
     );
-
-
-    const BoxData = [
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-      {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-        {
-          Box1: '1 Box',
-          Dimension: '64 x 64',
-          Weight: '2.3kg',
-        },
-      
-    ];
-  
-    const ItemData = [
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-    ];
   
     const handlPress =()=>{
-    //   setDropDown(!dropDown)
     props.navigation.navigate("QrScanner")
-    }   
-  
-    const handleOrderAsShipped =()=>{
-      let body ={
-        pickingId : 0,
-        orderId:0,
-        pickerId:0,  
-        isPicked: true,
-        pickedDate:"2024-03-28T14:30:16.694Z",
-        itemId:0
-      }
-      dispatch(markAsPicked(body))
     }
   
-  
+    const handlePickerList =()=>{
+      let body ={
+        "orderId": route.params?.item?.internalId,
+        "pickerId": route.params?.item?.pickerId,
+        "isPicked": true,
+        "pickedDate": route.params?.item?.pickedDate,
+        "itemListDTOs" : route.params?.item?.itemInOrderOutputDTOs?.map((singleItem)=>({
+          "itemId": singleItem?.orderId,
+          "quantityPicked": singleItem?.quantity
+        }))
+      }
+      dispatch(pickedMarkByPickerList(body))
+    }
+
 
     return (
       <View style={{flex: 1, paddingHorizontal:16,}}>
@@ -551,7 +491,7 @@
             RIcon={false}
             RIconStyle={{marginRight: 5}}
             onPress={() => {
-              handleOrderAsShipped();
+              handlePickerList();
             }}
             disabled={false}
             loading={false}

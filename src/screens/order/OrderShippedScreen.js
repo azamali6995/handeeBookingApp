@@ -11,8 +11,17 @@ import {
 import React, { useState, useEffect } from 'react';
 import Header from '../../component/Header';
 import Button from '../../component/Button';
-
+import { useSelector, useDispatch } from 'react-redux';
+import {boxPackingSelector}  from '../../redux//slice/boxPacking';
+import {shippedMarkByShipper, shippedMarkByShipperSelector} from '../../redux//slice/shippedMarkByShipper';
+import LoadingPage from '../../component/LoadingPage';
 const OrderShippedScreen = (props) => {
+  const dispatch = useDispatch();
+
+  const {route, navigation} = props
+  const {boxPackingPayload} = useSelector(boxPackingSelector)
+  const {shippedMarkByShipperFetching ,shippedMarkByShipperPayload } = useSelector(shippedMarkByShipperSelector)
+
   const [dropDown, setDropDown] = useState(true) 
   const [itemData, setItemData] = useState({})
 
@@ -20,57 +29,22 @@ const OrderShippedScreen = (props) => {
     setItemData(props?.route?.params?.item)
   },[])
 
-  const BoxData = [
-    {
-      Box1: '1 Box',
-      Dimension: '64 x 64',
-      Weight: '2.3kg',
-    },
-    {
-      Box1: '1 Box',
-      Dimension: '64 x 64',
-      Weight: '2.3kg',
-    },
-  ];
-
-  const ItemData = [
-    {
-      CandyBox: 'Candy Box',
-      ItemNo: 1564,
-      Qty: 20,
-      ShipOrder: '20',
-      BioNo: 'B/O No',
-      SelfNo: 'Shel No',
-    },
-    {
-      CandyBox: 'Candy Box',
-      ItemNo: 1564,
-      Qty: 20,
-      ShipOrder: '20',
-      BioNo: 'B/O No',
-      SelfNo: 'Shel No',
-    },
-    {
-      CandyBox: 'Candy Box',
-      ItemNo: 1564,
-      Qty: 20,
-      ShipOrder: '20',
-      BioNo: 'B/O No',
-      SelfNo: 'Shel No',
-    },
-    {
-      Box1: '1 Box',
-      Dimension: '64 x 64',
-      Weight: '2.3kg',
-    },
-  ];
-
+  useEffect(()=>{
+    if(shippedMarkByShipperFetching == true){
+      navigation?.navigate("DashboradScreen")
+    }
+  },[shippedMarkByShipperFetching])
+ 
   const handlPress =()=>{
     setDropDown(!dropDown)
   }   
 
   const handleOrderAsShipped =()=>{
     console.log('Add here')
+    let body ={
+      "inrernalId": route?.params?.item?.internalId
+    }
+    dispatch(shippedMarkByShipper(body))
   }
 
 
@@ -81,6 +55,10 @@ const OrderShippedScreen = (props) => {
         backgroundColor="black"
         barStyle={'dark-content'}
       />
+      {  shippedMarkByShipperFetching &&
+            <LoadingPage />
+           
+          }
       <Header Left={true} Text={'Orders Shipped'} Right={true} Back={false} />
       <ScrollView 
       showsVerticalScrollIndicator={false}
@@ -126,7 +104,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.createdDate ? itemData?.createdDate.format("DD/MM/YYYY") : "null" }
+                 {itemData?.createdDate}
               </Text>
             </View>
   
@@ -277,7 +255,7 @@ const OrderShippedScreen = (props) => {
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
           />
           <FlatList
-            data={BoxData}
+            data={boxPackingPayload?.data}
             showsVerticalScrollIndicator={false}
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => {
@@ -354,9 +332,11 @@ const OrderShippedScreen = (props) => {
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
           />
 
-                    </View>
+         </View>
+
+
           <View style={{flex:1}}>
-          <View style={{flexDirection: 'row', paddingVetical:10, justifyContent: 'space-between'}}>
+             <View style={{flexDirection: 'row', paddingVetical:10, justifyContent: 'space-between'}}>
             <Text
               style={{
                 fontFamily: 'Inter-Bold',

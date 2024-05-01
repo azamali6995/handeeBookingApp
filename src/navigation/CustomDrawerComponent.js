@@ -11,11 +11,13 @@ import {
 } from 'react-native';
 import metrics from '../constants/metrics';
 import {responsiveWidth, responsiveHeight} from '../constants/responsive';
-
+import LocalStorage from '../services/LocalStorage';
 import DrawerItem from './DrawerItems';
 
+let local = new LocalStorage();
+
 export default function CustomDrawerComponent(props) {
-  const { navigation } =props  
+  const { navigation, routes } =props  
 
   const drawerItems = [
     {
@@ -40,6 +42,17 @@ export default function CustomDrawerComponent(props) {
   }
  
   const handleLogOut = async() => {
+    await local.deleteSession(result => {
+      if (result) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'LoginScreen', params: { value: 0 } }],
+        });
+      } else {
+        // Handle error while deleting session
+        console.log("Error deleting session");
+      }
+    });
   };
 
   const onPressDrawerItem = (data) => {

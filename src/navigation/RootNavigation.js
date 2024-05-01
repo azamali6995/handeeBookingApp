@@ -11,6 +11,7 @@ import OrderPackedScreen from '../screens/order/OrderPackedScreen';
 import OrderPickerScreen from '../screens/order/OrderPickerScreen';
 import QrScanner from '../screens/qrscanner/QrScanner';
 import OrderShippedScreen from '../screens/order/OrderShippedScreen';
+import SplashScreen from '../screens/auth/SplashScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -53,6 +54,8 @@ export const RootNavigation = () => {
 export const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="DashboradScreen" component={DrawerNavigator} />
       <Stack.Screen name="OrderPickerScreen" component={OrderPickerScreen} />

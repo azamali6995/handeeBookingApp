@@ -29,16 +29,17 @@ const Header = (props) => {
              />
           </TouchableOpacity>
         }
-        {
-          props.Back&&
+        {props.Back&&
           <TouchableOpacity style={{ height: 45, width: 45, alignItems: 'flex-end', justifyContent: 'center' }} onPress={() => { }}>
           </TouchableOpacity>
         }
       </View>
+
       {props.Text &&
       <View style={{  justifyContent: "flex-end", marginBottom:5 }}>
         <Text style={{ alignSelf: 'center', color: 'black',fontSize:24,fontWeight:'700', fontFamily:"Inter-Bold" }}>{props.Text}</Text>
       </View>}
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
         {
           props.Right&&

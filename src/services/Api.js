@@ -7,8 +7,11 @@ export const API = {
   userShipper:() => request.get(`api/order/getByShipperId`),
   boxScanning:(id) => request.get('api/order/getByPackerId',id), // Pending
   
-  markAsPicked:(body) => request.post('api/order/pickedMarkByPicker',body)
+  markAsPicked:(body) => request.post('api/order/pickedMarkByPicker',body),
+  pickedMarkByPickerList:(body) => request.post('api/order/pickedMarkByPickerList',body),    // this one call on press button 
+  boxPacking:(body) => request.post('api/packingBox/addOrUpdate',body),
+  pakedMarkedByPaker:(body) => request.post('api/order/packedMarkByPacker',body),
+  shippedMarkByShipper:(body) => request.post('api/order/shippedMarkByShipper',body),
 
-  
   
 };

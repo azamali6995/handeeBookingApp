@@ -14,76 +14,70 @@ import {
   import Button from '../../component/Button';
   import InputText from '../../component/Input'
   import { COLORS } from '../../constants';
-  
+  import { useSelector , useDispatch } from 'react-redux';
+  import {boxPacking, boxPackingSelector}  from '../../redux//slice/boxPacking';
+  import {pakedMarkedByPaker, pakedMarkedByPakerSelector} from '../../redux//slice/packedMarkedByPaker';
+  import LoadingPage from '../../component/LoadingPage';
+
+
   const OrderPackedScreen = (props) => {
+    const {route, navigation} = props
+    const dispatch = useDispatch();
+    const {boxPackingPayload, boxPackingFetching} = useSelector(boxPackingSelector)
+    const {pakedMarkedByPakerFetching ,pakedMarkedByPakerPayload } = useSelector(pakedMarkedByPakerSelector)
+
 
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
     const [boxWidth, setBoxWidth] = useState('') 
     const [boxheight, setBoxheight] = useState('') 
     const [boxWeight, setBoxWeight] = useState('') 
-
-
+    const [isAddBox , setIsAddBox] = useState(false)
 
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
     },[])
 
-    console.log("PackerItemData", itemData)
+    useEffect(()=>{
+      if(pakedMarkedByPakerFetching == true){
+        navigation?.navigate("DashboradScreen")
+      }
+    },[pakedMarkedByPakerFetching])
 
-    const BoxData = [
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-    ];
-  
-    const ItemData = [
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        CandyBox: 'Candy Box',
-        ItemNo: 1564,
-        Qty: 20,
-        ShipOrder: '20',
-        BioNo: 'B/O No',
-        SelfNo: 'Shel No',
-      },
-      {
-        Box1: '1 Box',
-        Dimension: '64 x 64',
-        Weight: '2.3kg',
-      },
-    ];
-  
+
     const handlPress =()=>{
       setDropDown(!dropDown)
     }   
+
+    const handleAddBox =()=>{
+      setIsAddBox(!isAddBox)
+    }
   
     const handleOrderAsShipped =()=>{
       console.log('Add here')
+      let body ={
+        "inrernalId": route?.params?.item?.internalId
+      }
+      dispatch(pakedMarkedByPaker(body))
     }
 
     const handleDone =()=>{
-       console.log('Add here')
+      let body = {
+        "width": boxWidth,
+        "height": boxheight,
+        "weight": boxWeight,
+        "orderId": route?.params?.item?.internalId,
+      }
+    dispatch(boxPacking(body))
+   
+      setBoxWeight('')
+      setBoxheight('')
+      setBoxWidth('')
     }
   
+
+
     return (
       <View style={{flex: 1, paddingHorizontal:16,}}>
         <StatusBar
@@ -91,6 +85,11 @@ import {
           backgroundColor="black"
           barStyle={'dark-content'}
         />
+          {boxPackingFetching || pakedMarkedByPakerFetching ?
+            <LoadingPage />
+            :null
+          }
+
         <Header Left={true} Text={'Orders Packed'} Right={true} Back={false} />
         <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -284,24 +283,28 @@ import {
               Boxes
             </Text>
             <View style={{flexDirection:"row"}}>
+         
               <Text
                 style={{fontFamily: 'Inter-Medium', fontWeight: '500', color:"black", fontSize: 16}}>
                 Add Box
               </Text>
-              <View style={{height:20,width:20, borderRadius:10, backgroundColor:"#2591CA",alignItems:"center", justifyContent:"center", marginLeft:5}}>
+              
+              <TouchableOpacity 
+              onPress={()=>{handleAddBox()}}
+              style={{height:20,width:20, borderRadius:10, backgroundColor:"#2591CA",alignItems:"center", justifyContent:"center", marginLeft:5}}>
                 <Image source={require('../../assets/images/plus.png')}
                     style={{height:11, width:11}}
                     resizeMode='contain'
                 />
-              </View>  
+              </TouchableOpacity>  
             </View>
-            
             </View>
             
             <View
               style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
             />
-            
+            {isAddBox &&
+            <>
              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{paddingVertical: 10}}>
                 <Text
@@ -376,7 +379,7 @@ import {
                 
                 </View>
               </View>   
-
+                  
            <View
           style={{
             paddingVertical: 10,
@@ -398,13 +401,15 @@ import {
             loading={false}
           />
         </View>   
-
         <View
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
-          />  
+          /> 
+        </>
+            }
+         
         <View style={{}}>
         <FlatList
-            data={BoxData}
+            data={boxPackingPayload?.data}
             showsVerticalScrollIndicator={false}
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => {
@@ -440,7 +445,7 @@ import {
                       fontWeight: '500',
                       color: '#778B9D',
                     }}>
-                    Dimension:
+                    Height:
                   </Text>
                   <Text
                     style={{
@@ -450,7 +455,7 @@ import {
                       marginLeft: 3,
                       color: '#2591CA',
                     }}>
-                    {item?.Dimension}
+                    {item?.height}
                   </Text>
                 </View>
                 <View style={{flexDirection: 'row'}}>
@@ -461,7 +466,7 @@ import {
                       fontWeight: '500',
                       color: '#778B9D',
                     }}>
-                    Dimension:
+                    Weight:
                   </Text>
                   <Text
                     style={{
@@ -471,7 +476,7 @@ import {
                       marginLeft: 3,
                       color: '#2591CA',
                     }}>
-                    {item?.Weight}
+                    {item?.weight}
                   </Text>
                 </View>
               </View>
@@ -691,7 +696,7 @@ import {
           }}>
           <Button
             buttonStyle={{borderRadius: 10, }}
-            title={'Mark order as Shipped'}
+            title={'Mark order as Packed'}
             LIcon={false}
             LIconStyle={{marginLeft: 5}}
             RIcon={false}
