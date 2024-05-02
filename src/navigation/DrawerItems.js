@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector  } from 'react-redux';
 import { userLoginSelector } from '../redux/slice/authSlice';
+import LocalStorage from '../services/LocalStorage';
 
 
 const DrawerItems = (props) => {
-  console.log("props345345r34", userLoginPayload)
   const {navigation, } = props
-  const { userLoginPayload } = useSelector(userLoginSelector)
+  let Local = new LocalStorage()
   const [showDropdown, setShowDropdown] = useState(false);
   const [userId, setUserId] = useState(1)
+  const [userInformation, setUserInformation] = useState([])
+
+  useEffect(()=>{
+    const handleGetUserInfo = async()=>{
+       await Local.getSession(result => {
+        setUserInformation(result?.userInfo)
+    });
+   }
+   handleGetUserInfo()
+  },[])
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -69,7 +79,7 @@ const DrawerItems = (props) => {
         </View>
         {data?.title === 'Pending Order' && showDropdown && (
           <View style={{flexDirection: 'column', alignItems:"center", marginRight:28}}>
-          {userLoginPayload?.data?.rolesOutputDTO.map(item =>{
+          {userInformation?.data?.rolesOutputDTO.map(item =>{
                 return(
             item?.roleId == 2 ?  
             <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePicker(item)} }>

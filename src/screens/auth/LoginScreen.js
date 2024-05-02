@@ -16,12 +16,8 @@ const LoginScreen = (props) => {
   const dispatch = useDispatch();
   const { userLoginSuccess, userLoginFetching } = useSelector(userLoginSelector)
   const [secureText, setSecureText] = useState(true);
-  const [email, setEmail] = useState('orders@handeeproducts.com');  // 2
-  const [password, setPassword] = useState('1234');
-
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState('');  // 2
+  const [password, setPassword] = useState('');
 
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [emailError, setEmailError] = useState(false)
@@ -46,7 +42,6 @@ const LoginScreen = (props) => {
     }
     dispatch(userLogin({email, password}));
   }
-
 
   return (
     <TranslucentView>

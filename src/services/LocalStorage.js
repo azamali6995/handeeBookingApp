@@ -4,6 +4,7 @@ const SESSION_TOKEN_KEY = '@Session:Token';
 
 export default class LocalStorage {
   async createSession(sData, onCompleted) {
+    console.log("ssdfasdfasdf", sData)
     try {
       AsyncStorage.setItem(SESSION_INFO_KEY, JSON.stringify(sData))
         .then(() => {

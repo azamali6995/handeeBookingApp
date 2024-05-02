@@ -5,28 +5,44 @@ import React, { useEffect } from 'react'
 import Header from '../../component/Header'
 import { useSelector , useDispatch } from 'react-redux';
 import { userLoginSelector } from '../../redux/slice/authSlice';
+import { userPickerSelector } from '../../redux/slice/pickerSlice';
+import { userPackerSelector } from '../../redux/slice/packerSlice';
+import { userShipperSelector } from '../../redux/slice/shipperSlice';
 import { userPicker , } from '../../redux/slice/pickerSlice';
 import { userPacker  } from '../../redux/slice/packerSlice';
 import { userShipper } from '../../redux/slice/shipperSlice';
 
 import PieChartScreen from './chart/PieChartScreen';
 import BarChart from './chart/BarChart';
+import LoadingPage from '../../component/LoadingPage';
+import LocalStorage from '../../services/LocalStorage';
+
 
 const DashboradScreen = (props) => {
   const dispatch = useDispatch();
-  const { userLoginPayload } = useSelector(userLoginSelector)
-  
+  let Local = new LocalStorage()
+  const { userLoginPayload, userLoginFetching } = useSelector(userLoginSelector)
+  const { userPickerFetching,  } = useSelector(userPickerSelector)
+  const { userPackerFetching  } = useSelector(userPackerSelector)
+  const { userShipperFetching  } = useSelector(userShipperSelector)
+
+
     useEffect(()=>{
-      userLoginPayload?.data?.rolesOutputDTO.map(item=>{
-        if(item.roleId == 2 ){
-          dispatch(userPicker())
-          }else if(item.roleId == 3){
-            dispatch(userPacker())
-          }else if(item.roleId == 4 ){
-            dispatch(userShipper())
-          }
-      })
-    },[userLoginPayload])
+        const handleGetUserInfo = async()=>{
+           await Local.getSession(result => {
+            result?.userInfo?.data?.rolesOutputDTO.map(item=>{
+              if(item.roleId == 2 ){
+                dispatch(userPicker())
+                }else if(item.roleId == 3){
+                  dispatch(userPacker())
+                }else if(item.roleId == 4 ){
+                  dispatch(userShipper())
+                }
+            })
+        });
+       }
+       handleGetUserInfo()
+    },[])
 
     const TotalOrder =[
        {
@@ -74,7 +90,7 @@ const DashboradScreen = (props) => {
         // }else {
         // props.navigation.navigate("PendingOrderScreen")    
         // }
-    }
+      }
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
@@ -94,6 +110,10 @@ const DashboradScreen = (props) => {
       barStyle={'dark-content'}
     />
     <View style={{paddingHorizontal:10}}>
+      {userPickerFetching || userPackerFetching || userShipperFetching && 
+      <LoadingPage />
+      }
+
      <Header Left={true} Text={'Dashborad'} Right={true} Back={false} customNavigation={props?.navigation} />
     </View>
     <ScrollView 
@@ -106,8 +126,8 @@ const DashboradScreen = (props) => {
         keyExtractor={item => item.id}
         numColumns={2}
         renderItem={({item, index}) => (
-        <TouchableOpacity 
-          onPress={()=>handleOrderScreen(item)}
+        <View 
+          // onPress={()=>handleOrderScreen(item)}
               // style={{ height:176, width:184, margin:8, borderRadius:10, paddingHorizontal:10,paddingVertical:10, backgroundColor:"skyblue"}}
               style={styles.item}
               >
@@ -137,7 +157,7 @@ const DashboradScreen = (props) => {
                 <View />
                </View> 
 
-          </TouchableOpacity>
+          </View>
         )}
      />
 

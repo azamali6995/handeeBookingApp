@@ -12,7 +12,7 @@ const PendingOrderScreen = ({navigation, route}) => {
  console.log("routerouterouteroute", route.params)
 
   const dispatch = useDispatch();
-  const {userLoginFetching, userLoginPayload} = useSelector(userLoginSelector)
+  const {userLoginFetching} = useSelector(userLoginSelector)
   const {userPickerPayload,} = useSelector(userPickerSelector)
   const {userPackerPayload,} = useSelector(userPackerSelector)
   const {userShipperPayload} = useSelector(userShipperSelector)
@@ -60,6 +60,11 @@ const PendingOrderScreen = ({navigation, route}) => {
       <Header Left={true} Text={'All Orders'} Right={true} Back={false} />
       
       <View style={{ flex:1 ,paddingVertical:10 }}>
+      {allOrder?.length <= 0 ? 
+        <View style={{alignItems:'center', justifyContent:"center", flex:1 }}>
+          <Text style={styles.emptyText}>No order found</Text>
+        </View>
+      :
       <FlatList
         data={allOrder}
         keyExtractor={item => item.id}
@@ -84,7 +89,8 @@ const PendingOrderScreen = ({navigation, route}) => {
             </View>
             </TouchableOpacity>
         )}
-      />      
+      />   
+      }   
       </View>
       
     </View>
@@ -93,4 +99,13 @@ const PendingOrderScreen = ({navigation, route}) => {
 
 export default PendingOrderScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  emptyText:{ 
+    alignSelf: 'center',
+    color: 'black',
+    fontSize:20,
+    fontWeight:'700', 
+    fontFamily:"Inter-Bold" 
+  }
+
+});
