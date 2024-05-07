@@ -12,7 +12,7 @@ import OrderPickerScreen from '../screens/order/OrderPickerScreen';
 import QrScanner from '../screens/qrscanner/QrScanner';
 import OrderShippedScreen from '../screens/order/OrderShippedScreen';
 import SplashScreen from '../screens/auth/SplashScreen';
-
+import AllBoxesScreen from '../screens/boxs/AllBoxesScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -63,6 +63,7 @@ export const MainStackNavigator = () => {
       <Stack.Screen name="PendingOrderScreen" component={PendingOrderScreen} />
       <Stack.Screen name="OrderShippedScreen" component={OrderShippedScreen} />
       <Stack.Screen name="QrScanner" component={QrScanner} />
+      <Stack.Screen name="AllBoxesScreen" component={AllBoxesScreen} />
     </Stack.Navigator>
   );
 };

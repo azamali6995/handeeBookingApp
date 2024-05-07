@@ -11,6 +11,8 @@ import { totalCount} from '../slice/QrCodeSlice'
 import { boxPackingSlice } from '../slice/boxPacking'
 import { pakedMarkedByPakerSlice } from '../slice/packedMarkedByPaker'
 import { shippedMarkByShipperSlice } from '../slice/shippedMarkByShipper';
+import { getBoxPackingSlice } from '../slice/getBoxPackingList'
+
 
 const store = configureStore({
   reducer: {
@@ -22,11 +24,11 @@ const store = configureStore({
     shipper: userShipperSlice.reducer,
     boxScan: boxScanningSlice.reducer,
     markPicked: markAsPickedSlice.reducer,
-    pickedMarkByPickerListSlice : pickedMarkByPickerListSlice.reducer,
+    MarkByPickerList : pickedMarkByPickerListSlice.reducer,
     boxPacking : boxPackingSlice.reducer,
     pakedMarkedByPaker : pakedMarkedByPakerSlice.reducer,
     shippedMarked: shippedMarkByShipperSlice.reducer,
-
+    getBoxlist : getBoxPackingSlice.reducer
 
   },
 });

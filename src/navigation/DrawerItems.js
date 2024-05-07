@@ -26,12 +26,16 @@ const DrawerItems = (props) => {
   };
   const handlePicker =(item)=>{
     console.log("dataFrom", item)
+    navigation.closeDrawer()
     navigation.navigate("PendingOrderScreen", {pickerData : item})
+
   }
   const handleShipped =(item)=>{
+    navigation.closeDrawer()
     navigation.navigate("PendingOrderScreen", {shippedData : item})
   }
   const handlePacker =(item)=>{
+    navigation.closeDrawer()
     navigation.navigate("PendingOrderScreen", {packerData : item})
   }
 

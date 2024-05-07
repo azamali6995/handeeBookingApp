@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image,TouchableOpacity, Platform, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Alert, Image,TouchableOpacity, Platform, TextInput} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Button from '../../component/Button';
 import {COLORS, icons} from '../../constants';
@@ -14,7 +14,7 @@ import LoadingPage from '../../component/LoadingPage';
 const LoginScreen = (props) => {
   const {navigation, route} = props;
   const dispatch = useDispatch();
-  const { userLoginSuccess, userLoginFetching } = useSelector(userLoginSelector)
+  const { userLoginSuccess, userLoginPayload, userLoginFetching } = useSelector(userLoginSelector)
   const [secureText, setSecureText] = useState(true);
   const [email, setEmail] = useState('');  // 2
   const [password, setPassword] = useState('');
@@ -24,12 +24,16 @@ const LoginScreen = (props) => {
   const [passwordlError, setPasswordlError] = useState(false)
   const [loadig, setLoading] = useState(false);
 
+
+  
   useEffect(() => {
-    if(userLoginSuccess){
-      dispatch(clearUserState());
+    if(userLoginPayload?.httpStatusCode == 200){
+      // dispatch(clearUserState());
       navigation.reset({index:0,routes:[{name:'DashboradScreen'}]})
-      } 
-  },[userLoginSuccess])
+      } else{
+        Alert.alert(userLoginPayload?.message)
+      }
+  },[userLoginPayload])
   
   const handleLogin =()=>{
     if (!regex.email.test(email)) {

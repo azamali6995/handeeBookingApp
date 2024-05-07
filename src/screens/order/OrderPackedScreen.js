@@ -15,17 +15,19 @@ import {
   import InputText from '../../component/Input'
   import { COLORS } from '../../constants';
   import { useSelector , useDispatch } from 'react-redux';
-  import {boxPacking, boxPackingSelector}  from '../../redux//slice/boxPacking';
+  import {boxPacking, boxPackingSelector}  from '../../redux/slice/boxPacking';
+  import {getBoxPacking , getBoxPackingSelector }  from '../../redux/slice/getBoxPackingList';
   import {pakedMarkedByPaker, pakedMarkedByPakerSelector} from '../../redux//slice/packedMarkedByPaker';
   import LoadingPage from '../../component/LoadingPage';
+  import { useFocusEffect } from '@react-navigation/native';
 
 
   const OrderPackedScreen = (props) => {
     const {route, navigation} = props
     const dispatch = useDispatch();
     const {boxPackingPayload, boxPackingFetching} = useSelector(boxPackingSelector)
+    const {getBoxPackingPayload , getBoxPackingFetching} = useSelector(getBoxPackingSelector)
     const {pakedMarkedByPakerFetching ,pakedMarkedByPakerPayload } = useSelector(pakedMarkedByPakerSelector)
-
 
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
@@ -34,6 +36,8 @@ import {
     const [boxWeight, setBoxWeight] = useState('') 
     const [isAddBox , setIsAddBox] = useState(false)
 
+
+    console.log("asdfasdfasdf", getBoxPackingPayload)
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
@@ -70,13 +74,18 @@ import {
         "orderId": route?.params?.item?.internalId,
       }
     dispatch(boxPacking(body))
-   
       setBoxWeight('')
       setBoxheight('')
       setBoxWidth('')
+      dispatch(getBoxPacking(route?.params?.item?.internalId))
     }
-  
 
+    useFocusEffect(
+      React.useCallback(() => {
+        let id = route?.params?.item?.internalId
+        dispatch(getBoxPacking(id))
+      }, [navigation])
+    );
 
     return (
       <View style={{flex: 1, paddingHorizontal:16,}}>
@@ -299,12 +308,12 @@ import {
               </TouchableOpacity>  
             </View>
             </View>
-            
-            <View
-              style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
-            />
+
+            {/* <View
+              style={{borderWidth: 1, borderColor: '#CCCCCC', }}
+            /> */}
             {isAddBox &&
-            <>
+            <View  style={{}}>
              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{paddingVertical: 10}}>
                 <Text
@@ -380,7 +389,7 @@ import {
                 </View>
               </View>   
                   
-           <View
+             <View
           style={{
             paddingVertical: 10,
             // paddingHorizontal: 165,
@@ -400,89 +409,101 @@ import {
             disabled={false}
             loading={false}
           />
-        </View>   
-        <View
-            style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
-          /> 
-        </>
+            </View>   
+            
+            </View>
             }
-         
-        <View style={{}}>
-        <FlatList
-            data={boxPackingPayload?.data}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={item => item.id}
-            ItemSeparatorComponent={() => {
-              return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
-            }}
-            renderItem={({item, index}) => (
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  flexDirection: 'row',
-                  height: 60,
-                  flex:1
-                }}>
-                <View style={{width: '30%'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-SemiBold',
-                      fontSize: 14,
-                      fontWeight: '600',
-                      color: '#2591CA',
-                    }}>
-                    1 Box
-                  </Text>
-                </View>
-
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      color: '#778B9D',
-                    }}>
-                    Height:
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      marginLeft: 3,
-                      color: '#2591CA',
-                    }}>
-                    {item?.height}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      color: '#778B9D',
-                    }}>
-                    Weight:
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      marginLeft: 3,
-                      color: '#2591CA',
-                    }}>
-                    {item?.weight}
-                  </Text>
-                </View>
+            <TouchableOpacity 
+              onPress={()=> navigation.navigate("AllBoxesScreen", {})}
+                
+              style={{height:20,  alignItems:"flex-end" }}>
+                <Text>see more</Text>
+            </TouchableOpacity>
+            <View
+                style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
+              /> 
+            <View style={{height:179}}>
+            {getBoxPackingPayload?.length <= 0 ? 
+            <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>   
+              <Text style={styles.emptyText}>No Box againt this order</Text> 
               </View>
-            )}
-          />
-        </View>    
+              :  
+              <FlatList
+                data={getBoxPackingPayload}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => item.id}
+                ItemSeparatorComponent={() => {
+                  return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
+                }}
+                renderItem={({item, index}) => (
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 5,
+                      flexDirection: 'row',
+                      height: 60,
+                      flex:1
+                    }}>
+                    <View style={{width: '30%'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-SemiBold',
+                          fontSize: 14,
+                          fontWeight: '600',
+                          color: '#2591CA',
+                        }}>
+                        1 Box
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Height:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.height}
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Weight:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.weight}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              />
+            }
+            </View>    
           <View
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
           />
@@ -714,5 +735,13 @@ import {
   
   export default OrderPackedScreen;
   
-  const styles = StyleSheet.create({});
+  const styles = StyleSheet.create({
+    emptyText:{ 
+      alignSelf: 'center',
+      color: 'black',
+      fontSize:16,
+      fontWeight:'700', 
+      fontFamily:"Inter-Bold" 
+    }
+  });
   

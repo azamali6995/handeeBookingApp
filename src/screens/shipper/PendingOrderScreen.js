@@ -1,4 +1,4 @@
-import {StatusBar, StyleSheet, Text, View, FlatList, TouchableOpacity, Image} from 'react-native';
+import {StatusBar, StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Alert} from 'react-native';
 import React, {useEffect, useState}  from 'react';
 import Header from '../../component/Header';
 import Translucent from '../../component/MainInputView';
@@ -8,35 +8,51 @@ import { userPickerSelector } from '../../redux/slice/pickerSlice';
 import { userPackerSelector } from '../../redux/slice/packerSlice';
 import { userShipperSelector } from '../../redux/slice/shipperSlice';
 
+import { userPicker , } from '../../redux/slice/pickerSlice';
+import { userPacker  } from '../../redux/slice/packerSlice';
+import { userShipper } from '../../redux/slice/shipperSlice';
+import LoadingPage from '../../component/LoadingPage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
+
 const PendingOrderScreen = ({navigation, route}) => {
  console.log("routerouterouteroute", route.params)
-
+ const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {userLoginFetching} = useSelector(userLoginSelector)
-  const {userPickerPayload,} = useSelector(userPickerSelector)
-  const {userPackerPayload,} = useSelector(userPackerSelector)
-  const {userShipperPayload} = useSelector(userShipperSelector)
-
-
+  const {userPickerPayload, userPickerFetching} = useSelector(userPickerSelector)
+  const {userPackerPayload, userPackerFetching} = useSelector(userPackerSelector)
+  const {userShipperPayload, userShipperFetching} = useSelector(userShipperSelector)
   const [selectedItem, setSelectedItem] = useState(null);  
   const [allOrder, setAllOrders] = useState([])
 
-  useEffect(()=>{
-        if(route.params?.pickerData?.roleId == 2){
-          if(userPickerPayload){
-            setAllOrders(userPickerPayload?.data)
-          } 
-        }else if(route.params?.packerData?.roleId == 3){
-          if(userPackerPayload){
-            setAllOrders(userPackerPayload?.data)
-          } 
-        }else if(route.params?.shippedData?.roleId == 4){
-          if(userShipperPayload){
-            setAllOrders(userShipperPayload?.data)
-          } 
-        }
 
-  },[route.params])
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(userPicker())
+      dispatch(userShipper())
+      dispatch(userPacker()) 
+    }, [navigation, isFocused ])
+  );
+  useEffect(() => {
+    handleStateData();
+  }, [userPickerPayload, userPackerPayload, userShipperPayload]);
+
+  const handleStateData =()=>{
+    if(route.params?.pickerData?.roleId == 2){
+      if(userPickerPayload){
+        setAllOrders(userPickerPayload?.data)
+      } 
+    }else if(route.params?.packerData?.roleId == 3){
+      if(userPackerPayload){
+        setAllOrders(userPackerPayload?.data)
+      } 
+    }else if(route.params?.shippedData?.roleId == 4){
+      if(userShipperPayload){
+        setAllOrders(userShipperPayload?.data)
+      } 
+    }
+  }
 
 
   const handleSelectedItem = (item, index)=>{
@@ -57,6 +73,12 @@ const PendingOrderScreen = ({navigation, route}) => {
         backgroundColor="black"
         barStyle={'dark-content'}
       />
+      {userShipperFetching || userPickerFetching || userPackerFetching ?
+      <LoadingPage/>
+      :
+      null
+    }
+
       <Header Left={true} Text={'All Orders'} Right={true} Back={false} />
       
       <View style={{ flex:1 ,paddingVertical:10 }}>

@@ -17,12 +17,16 @@
 
   import Checkbox from '../../component/Checkbox';
   import { useFocusEffect } from '@react-navigation/native';
+  import LoadingPage from '../../component/LoadingPage';
 
   const OrderPickerScreen = (props) => {
     const {navigation, route} = props
     const {qrScanningCount} = useSelector(state => state?.ScanningCount);
 
-    const {pickedMarkByPickerListFetching} = useSelector(pickedMarkByPickerListSelector)
+    const {pickedMarkByPickerListFetching, } = useSelector(pickedMarkByPickerListSelector)
+    console.log("state", pickedMarkByPickerListFetching)
+
+
     const dispatch = useDispatch();
     const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
@@ -35,12 +39,14 @@
       setItemData(props?.route?.params?.item)
     },[])
 
-    useEffect(()=>{
-      if(pickedMarkByPickerListFetching == true){
-        navigation?.navigate("DashboradScreen")
-      }
-    },[pickedMarkByPickerListFetching])
 
+    useFocusEffect(
+      React.useCallback(() => {
+        if(pickedMarkByPickerListFetching == true){
+          navigation?.navigate("DashboradScreen")
+        }
+      }, [])
+    );
 
     useFocusEffect(
       React.useCallback(() => {
@@ -49,7 +55,12 @@
         } else {
           setBtnEnable(false);
         }
-      }, [itemData, qrScanningCount])
+
+        if(pickedMarkByPickerListFetching == true){
+          navigation?.navigate("DashboradScreen")
+        }  
+
+      }, [itemData, qrScanningCount, pickedMarkByPickerListFetching])
     );
   
     const handlPress =()=>{
@@ -78,6 +89,9 @@
           backgroundColor="black"
           barStyle={'dark-content'}
         />
+        {pickedMarkByPickerListFetching &&
+            <LoadingPage />
+          }
         <Header Left={true} Text={'Orders Picker'} Right={true} Back={false} />
         <ScrollView 
         contentContainerStyle={{flexGrow: 1, paddingVertical:10}}

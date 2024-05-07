@@ -109,11 +109,10 @@ const DashboradScreen = (props) => {
       backgroundColor="black"
       barStyle={'dark-content'}
     />
-    <View style={{paddingHorizontal:10}}>
-      {userPickerFetching || userPackerFetching || userShipperFetching && 
+    {userPickerFetching || userPackerFetching || userShipperFetching && 
       <LoadingPage />
       }
-
+    <View style={{paddingHorizontal:10}}>
      <Header Left={true} Text={'Dashborad'} Right={true} Back={false} customNavigation={props?.navigation} />
     </View>
     <ScrollView 

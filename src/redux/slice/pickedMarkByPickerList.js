@@ -43,7 +43,9 @@ export const pickedMarkByPickerListSlice = createSlice({
     // ************ procedureConfigurations ******************
     builder
       .addCase(pickedMarkByPickerList.fulfilled, (state, { payload }) => {
-        console.log("<======pickedMarkByPickerList======>", payload?.data)
+        console.log("AzamAliiiiiii", payload?.data)
+        
+        // console.log("<======pickedMarkByPickerList======>", payload?.data)
         state.pickedMarkByPickerListPayload = payload.data;
         state.pickedMarkByPickerListFetching = false;
         state.pickedMarkByPickerListSuccess = true;
@@ -62,5 +64,5 @@ export const pickedMarkByPickerListSlice = createSlice({
   },
 });
 
-export const pickedMarkByPickerListSelector = state => state.markPicked;
+export const pickedMarkByPickerListSelector = state => state.MarkByPickerList;
 export const {clearUserState} = pickedMarkByPickerListSlice.actions;
