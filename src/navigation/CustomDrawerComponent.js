@@ -33,7 +33,7 @@ export default function CustomDrawerComponent(props) {
     {
       title: 'Completed Orders',
       name: require('../assets/images/order.png'),
-      routeName: 'OrderScreen',
+      routeName: 'OrderCompleteScreen',
     },
   ];
 

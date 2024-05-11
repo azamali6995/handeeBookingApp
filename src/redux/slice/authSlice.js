@@ -40,6 +40,7 @@ export const userLoginSlice = createSlice({
        state.userLoginFail = false
        state.userLoginMessage = ''
        state.userLoginSuccess = false
+       state.userLoginPayload=[]
     },
   },
   

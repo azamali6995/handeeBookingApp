@@ -11,15 +11,22 @@ const DrawerItems = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [userId, setUserId] = useState(1)
   const [userInformation, setUserInformation] = useState([])
+  const [roleData, setRoleData] = useState([])
 
   useEffect(()=>{
     const handleGetUserInfo = async()=>{
        await Local.getSession(result => {
         setUserInformation(result?.userInfo)
+
+        let SortAccordingRoleId = result.userInfo?.data?.rolesOutputDTO?.sort((a, b)=> a.roleId - b.roleId) 
+
+        console.log("resulLesOutputDTO", SortAccordingRoleId)
+
+        setRoleData(SortAccordingRoleId)  
     });
    }
    handleGetUserInfo()
-  },[])
+  },[navigation])
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -83,34 +90,26 @@ const DrawerItems = (props) => {
         </View>
         {data?.title === 'Pending Order' && showDropdown && (
           <View style={{flexDirection: 'column', alignItems:"center", marginRight:28}}>
-          {userInformation?.data?.rolesOutputDTO.map(item =>{
+          {roleData?.map(item =>{
                 return(
             item?.roleId == 2 ?  
             <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePicker(item)} }>
-              <Text style={{ color: '#fff' }}>Order to be Picked</Text>
+              <Text style={{ color: '#fff' }}>Orders to be Picked</Text>
             </TouchableOpacity>
-            :
-            item?.roleId == 4 ?  
-            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handleShipped(item)}}>
-              <Text style={{ color: '#fff' }}>Order to be Shipped</Text>
-            </TouchableOpacity>
-            :
-            item?.roleId == 3 && 
-            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePacker(item)}}>
-              <Text style={{ color: '#fff' }}>Order to be Packer</Text>
-            </TouchableOpacity>
-             
-
             
+            :
+            item?.roleId == 3 ? 
+            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handlePacker(item)}}>
+              <Text style={{ color: '#fff' }}>Orders to be Packed</Text>
+            </TouchableOpacity>
+            :
+            item?.roleId == 4 &&
+            <TouchableOpacity style={{marginTop:10, height:40, justifyContent:"center",}} onPress={() => {handleShipped(item)}}>
+              <Text style={{ color: '#fff' }}>Orders to be Shipped</Text>
+            </TouchableOpacity>
+
                 )
-              
-
             })}
-
-
-
-           
-
           </View>
         )}
       </View>

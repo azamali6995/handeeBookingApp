@@ -63,7 +63,7 @@
       }, [itemData, qrScanningCount, pickedMarkByPickerListFetching])
     );
   
-    const handlPress =()=>{
+    const handleBoxScan =(item)=>{
     props.navigation.navigate("QrScanner")
     }
   
@@ -94,9 +94,8 @@
           }
         <Header Left={true} Text={'Orders Picker'} Right={true} Back={false} />
         <ScrollView 
-        contentContainerStyle={{flexGrow: 1, paddingVertical:10}}
-        showsVerticalScrollIndicator={false}
-        >
+          contentContainerStyle = {{flexGrow :1, paddingVertical:10}}
+          showsVerticalScrollIndicator = {false} >
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{paddingVertical: 10}}>
               <Text
@@ -116,7 +115,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "null" }
+                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "N/A" }
               </Text>
             </View>
   
@@ -138,7 +137,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.createdDate ? itemData?.createdDate : "null" }
+                 {itemData?.createdDate ? itemData?.createdDate?.substring(0,10) : "N/A" }
               </Text>
             </View>
   
@@ -160,7 +159,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.customerId ?  itemData?.customerId : "null" }
+                 {itemData?.customerId ?  itemData?.customerId : "N/A" }
               </Text>
             </View>
           </View>
@@ -184,7 +183,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.terms ?  itemData?.terms : "null" }
+                {itemData?.terms ?  itemData?.terms : "N/A" }
               </Text>
             </View>
   
@@ -206,7 +205,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.via ?  itemData?.via : "null" }
+                {itemData?.via ?  itemData?.via : "N/A" }
                
               </Text>
             </View>
@@ -229,7 +228,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.poNumber ?  itemData?.poNumber : "null" }
+                {itemData?.poNumber ?  itemData?.poNumber : "N/A" }
               </Text>
             </View>
           </View>
@@ -253,7 +252,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.shippedDate ? itemData?.shippedDate : "null" }
+                {itemData?.shippedDate ? itemData?.shippedDate?.substring(0,10): "N/A" }
               </Text>
             </View>
   
@@ -275,7 +274,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "null" }
+                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "N/A" }
               </Text>
             </View>
           </View>
@@ -284,7 +283,7 @@
               style={{borderWidth: 1, borderColor: '#CCCCCC', marginVertical:15}}
             />
             <View style={{flex:1}}>
-            <View style={{flexDirection: 'row', marginBottom:10, justifyContent: 'space-between'}}>
+            <View style={{flexDirection:'row', marginBottom :10, justifyContent: 'space-between'}}>
               <Text
                 style={{
                   fontFamily: 'Inter-Bold',
@@ -293,18 +292,9 @@
                 }}>
                 Items
               </Text>
-              <TouchableOpacity 
-               style={{height:30, width:121, flexDirection:"row", justifyContent:"center", alignItems:"center", borderRadius:7, backgroundColor:"#2591CA" }}   
-               onPress={()=>handlPress()}  >
-                <Image
-                  source={require('../../assets/images/scan.png')}
-                  resizeMode='contain'
-                  style={{height: 20, width: 20, tintColor : "white", marginRight:10 }} />
-                <Text style={{fontFamily:'Inter-Regular', fontWeight:"400", color:'white', fontSize:10}}>Scanned Item</Text>
-              </TouchableOpacity>
+              
             </View>
-  
-                {/* {console.log("itemDatapackingBoxDetailOutputDTOs", itemData?.itemInOrderOutputDTOs)} */}
+                {console.log("PickerItemslist", itemData)}
             <FlatList
               data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
               keyExtractor={item => item.id}
@@ -337,24 +327,34 @@
                     </View>
   
                     <View style={{paddingHorizontal: 10,  }}>
-                      <View style={{flexDirection: 'row', marginVertical:3}}>
-                        <Text
+                      <View style={{alignItems:"center", flexDirection:"row", marginVertical:3}}>
+                       <View style={{width:"60%"}}>
+                       <Text
+                        numberOfLines={2}
+                        ellipsizeMode='tail'
                           style={{
                             fontFamily: 'Inter-semiBold',
-                            fontSize: 14,
+                            fontSize: 12,
                             color: '#2591CA',
+                          
                           }}>
-                          Candy Box{' '}
+                         {item?.description} 
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            marginTop: 2,
-                            color: '#778B9D',
-                          }}>
-                          (Scannaed Item 3){' '}
-                        </Text>
+                       </View> 
+
+                       <View style={{alignItems:"flex-end", paddingHorizontal:16, width:"30%",  }}>
+                       <TouchableOpacity 
+                          style={{height:30, paddingRight:8, paddingLeft:17, flexDirection:"row",  borderRadius:7, backgroundColor:"#2591CA", alignItems:"center", justifyContent:"center", }}   
+                          onPress={()=>handleBoxScan(item)}  >
+                            <Image
+                              source={require('../../assets/images/scan.png')}
+                              resizeMode='contain'
+                              style={{height: 20, width: 20, tintColor : "white", marginRight:5 }} />
+                            <Text style={{fontFamily:'Inter-Regular', fontWeight:"400", color:'white', fontSize:10}}>Scan</Text>
+                          </TouchableOpacity>
+                       </View>   
+                        
+                       
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
@@ -393,47 +393,20 @@
                         </Text>
                       </View>
   
-                      
-                      <View style={{flexDirection: 'row',  alignItems:"center", marginVertical: 3}}>
-                        <Text
+                      <View 
+                       style={{
+                        flexDirection: 'row', 
+                        width:'90%', 
+                        alignItems:"center", 
+                        justifyContent:"space-between", 
+                        marginVertical: 3}}
+                        >
+                       <View style={{flexDirection:"row"}}>
+                       <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
                             color: '#778B9D',
-                          }}>
-                          Ship order:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.shipOrder?.substring(0, 3) ?? "N/A"}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 10,
-                          }}>
-                          B/O NO:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.boNumber ?? "N/A" }
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 10,
                           }}>
                           Shelf NO:{' '}
                         </Text>
@@ -443,9 +416,11 @@
                             fontSize: 10,
                             color: '#2591CA',
                           }}>
-                          {item?.shipOrder?.substring(0, 3) ?? "N/A"}
+                          {item?.shelfNumber?.substring(0, 3) ?? "N/A"}
                         </Text>
-                        <View style={{marginLeft:15, }}>
+                      </View>   
+                        
+                       <View style={{alignItems:"flex-end"}}>
                         <Checkbox
                           isChecked={isChecked}
                           onToggle={() => {
@@ -453,37 +428,8 @@
                           }}
                         />
                         </View>
-                        
                       </View>
-
-
                     </View>
-                  </View>
-                  <View style={{marginVertical: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#ABACAC',
-                      }}>
-                      {item?.description ?? "N/A" }
-                    </Text>
-                  </View>
-  
-                  <View style={{flexDirection: 'row'}}>
-                    <Image
-                      source={require('../../assets/images/location.png')}
-                      resizeMode="contain"
-                      style={{height: 14, width: 14}}
-                    />
-                    {/* <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#778B9D',
-                      }}>
-                      Lorem Ipsum is simply dummy text of the printing.
-                    </Text> */}
                   </View>
                 </>
               )}/>     

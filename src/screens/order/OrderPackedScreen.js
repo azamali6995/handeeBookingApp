@@ -12,7 +12,7 @@ import {
   import React, { useState, useEffect } from 'react';
   import Header from '../../component/Header';
   import Button from '../../component/Button';
-  import InputText from '../../component/Input'
+  import InputText from '../../component/InputBox'
   import { COLORS } from '../../constants';
   import { useSelector , useDispatch } from 'react-redux';
   import {boxPacking, boxPackingSelector}  from '../../redux/slice/boxPacking';
@@ -34,10 +34,8 @@ import {
     const [boxWidth, setBoxWidth] = useState('') 
     const [boxheight, setBoxheight] = useState('') 
     const [boxWeight, setBoxWeight] = useState('') 
+    const [boxLength, setBoxLength] = useState('') 
     const [isAddBox , setIsAddBox] = useState(false)
-
-
-    console.log("asdfasdfasdf", getBoxPackingPayload)
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
@@ -59,7 +57,6 @@ import {
     }
   
     const handleOrderAsShipped =()=>{
-      console.log('Add here')
       let body ={
         "inrernalId": route?.params?.item?.internalId
       }
@@ -71,20 +68,24 @@ import {
         "width": boxWidth,
         "height": boxheight,
         "weight": boxWeight,
+        // "length": boxLength,
         "orderId": route?.params?.item?.internalId,
       }
-    dispatch(boxPacking(body))
+      dispatch(boxPacking(body))
       setBoxWeight('')
       setBoxheight('')
       setBoxWidth('')
+      setBoxLength('')
       dispatch(getBoxPacking(route?.params?.item?.internalId))
     }
 
     useFocusEffect(
       React.useCallback(() => {
-        let id = route?.params?.item?.internalId
-        dispatch(getBoxPacking(id))
-      }, [navigation])
+        if(boxPackingPayload?.httpStatusCode == 200){
+          let id = route?.params?.item?.internalId
+          dispatch(getBoxPacking(id))
+        }
+      }, [boxPackingPayload])
     );
 
     return (
@@ -96,7 +97,7 @@ import {
         />
           {boxPackingFetching || pakedMarkedByPakerFetching ?
             <LoadingPage />
-            :null
+            : null
           }
 
         <Header Left={true} Text={'Orders Packed'} Right={true} Back={false} />
@@ -122,7 +123,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "null" }
+                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "N/A" }
               </Text>
             </View>
   
@@ -144,7 +145,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.createdDate ? itemData?.createdDate : "null" }
+                 {itemData?.createdDate ? itemData?.createdDate?.substring(0,10) : "N/A" }
               </Text>
             </View>
   
@@ -166,7 +167,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.customerId ?  itemData?.customerId : "null" }
+                 {itemData?.customerId ?  itemData?.customerId : "N/A" }
               </Text>
             </View>
           </View>
@@ -190,7 +191,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.terms ?  itemData?.terms : "null" }
+                {itemData?.terms ?  itemData?.terms : "N/A" }
               </Text>
             </View>
   
@@ -212,7 +213,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.via ?  itemData?.via : "null" }
+                {itemData?.via ?  itemData?.via : "N/A" }
                
               </Text>
             </View>
@@ -235,7 +236,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.poNumber ?  itemData?.poNumber : "null" }
+                {itemData?.poNumber ?  itemData?.poNumber : "N/A" }
               </Text>
             </View>
           </View>
@@ -259,7 +260,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.shippedDate ? itemData?.shippedDate : "null" }
+                {itemData?.shippedDate ? itemData?.shippedDate?.substring(0,10) : "N/A" }
               </Text>
             </View>
             <View style={{paddingVertical: 10, marginLeft:5, width:'55%'}}>
@@ -280,7 +281,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "null" }
+                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "N/A" }
               </Text>
             </View>
             </View>
@@ -325,12 +326,12 @@ import {
                     }}>
                     Width
                 </Text>
-                <View style={{height:38, justifyContent:"center", marginTop:10, width:110, borderRadius:7}} >
+                <View style={{height:38, justifyContent:"center", marginTop:10, width:82.8, borderRadius:7}} >
                 <InputText
                     val={boxWidth}
                     edit={true}
-                    bgStyle={{height:38, borderRadius:7,}}
-                    placeholder="64 inch"
+                    bgStyle={{height:38, borderRadius:7}}
+                    placeholder="inch"
                     removePadding={true}
                     onChangeText={txt => {
                       setBoxWidth(txt);
@@ -349,12 +350,12 @@ import {
                     }}>
                     Height
                 </Text>
-                <View style={{height:38, justifyContent:"center", marginTop:10, width:110, borderRadius:7}} >
+                <View style={{height:38, justifyContent:"center", marginTop:10, width:82.8, borderRadius:7}} >
                 <InputText
                     val={boxheight}
                     edit={true}
                     bgStyle={{height:38, borderRadius:7,}}
-                    placeholder="64 inch"
+                    placeholder="inch"
                     removePadding={true}
                     onChangeText={txt => {
                       setBoxheight(txt);
@@ -373,12 +374,12 @@ import {
                     }}>
                     Weight
                 </Text>
-                <View style={{height:38, justifyContent:"center", marginTop:10, width:110, borderRadius:7}} >
+                <View style={{height:38, justifyContent:"center", marginTop:10, width:82.8, borderRadius:7}} >
                 <InputText
                     val={boxWeight}
                     edit={true}
                     bgStyle={{height:38, borderRadius:7,}}
-                    placeholder="64 inch"
+                    placeholder="kg"
                     removePadding={true}
                     onChangeText={txt => {
                       setBoxWeight(txt);
@@ -387,6 +388,33 @@ import {
                 </View> 
                 
                 </View>
+
+                <View style={{paddingVertical: 10}}>
+                <Text
+                    style={{
+                    fontFamily: 'Inter-Medium',
+                    fontSize: 14,
+                    fontWeight: '500',
+                    color: '#778B9D',
+                    }}>
+                    Length
+                </Text>
+                <View style={{height:38, justifyContent:"center", marginTop:10, width:82.8, borderRadius:7}} >
+                <InputText
+                    val={boxLength}
+                    edit={true}
+                    bgStyle={{height:38, borderRadius:7,}}
+                    placeholder="inch"
+                    removePadding={true}
+                    onChangeText={txt => {
+                      setBoxLength(txt);
+                    }}
+                  />
+                </View> 
+                
+                </View>    
+
+
               </View>   
                   
              <View
@@ -565,24 +593,19 @@ import {
                     </View>
   
                     <View style={{paddingHorizontal: 10,  }}>
-                      <View style={{flexDirection: 'row', marginVertical:3}}>
+                    <View style={{ paddingRight:10,  marginVertical:3}}>
                         <Text
+                        numberOfLines={2}
+                        ellipsizeMode='tail'
                           style={{
                             fontFamily: 'Inter-semiBold',
                             fontSize: 14,
                             color: '#2591CA',
+                          
                           }}>
-                          Candy Box{' '}
+                         {item?.description.substring(0, 30)} 
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            marginTop: 2,
-                            color: '#778B9D',
-                          }}>
-                          (Scannaed Item 3){' '}
-                        </Text>
+                       
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
@@ -622,45 +645,13 @@ import {
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
+                        
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
                             color: '#778B9D',
-                          }}>
-                          Ship order:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.shipOrder ?? "N/A" }
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 15,
-                          }}>
-                          B/O NO:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.boNumber ?? "N/A" }
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 15,
+                            // marginLeft: 15,
                           }}>
                           Shelf NO:{' '}
                         </Text>
@@ -675,32 +666,9 @@ import {
                       </View>
                     </View>
                   </View>
-                  <View style={{marginVertical: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#ABACAC',
-                      }}>
-                      {item?.description ?? "N/A" }
-                    </Text>
-                  </View>
+                  
   
-                  <View style={{flexDirection: 'row'}}>
-                    <Image
-                      source={require('../../assets/images/location.png')}
-                      resizeMode="contain"
-                      style={{height: 14, width: 14}}
-                    />
-                    {/* <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#778B9D',
-                      }}>
-                      Lorem Ipsum is simply dummy text of the printing.
-                    </Text> */}
-                  </View>
+                 
                 </>
               )}
             />    

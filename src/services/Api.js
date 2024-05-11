@@ -14,5 +14,9 @@ export const API = {
   shippedMarkByShipper:(body) => request.post('api/order/shippedMarkByShipper',body),
   getBoxPacking:(id) => request.get(`api/packingBox/getBoxByOrderId?orderId=${id}`),
 
-  
+
+  completedOrders:() => request.get(`api/order/getCompletedOrderByUserId`),
+  dashboardStatus:() => request.get(`api/dashboard/getOrderByStatus`)
+
+
 };

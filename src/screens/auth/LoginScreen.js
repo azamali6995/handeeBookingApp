@@ -9,6 +9,10 @@ import { userLogin, clearUserState, userLoginSelector } from '../../redux/slice/
 import {useSelector, useDispatch} from 'react-redux';
 import { regex } from '../../constants/constants';
 import LoadingPage from '../../component/LoadingPage';
+import LocalStorage from '../../services/LocalStorage';
+
+
+let local = new LocalStorage();
 
 
 const LoginScreen = (props) => {
@@ -24,16 +28,19 @@ const LoginScreen = (props) => {
   const [passwordlError, setPasswordlError] = useState(false)
   const [loadig, setLoading] = useState(false);
 
-
   
   useEffect(() => {
     if(userLoginPayload?.httpStatusCode == 200){
-      // dispatch(clearUserState());
+      dispatch(clearUserState());
       navigation.reset({index:0,routes:[{name:'DashboradScreen'}]})
       } else{
+        if(userLoginPayload?.message){
         Alert.alert(userLoginPayload?.message)
+        }
       }
   },[userLoginPayload])
+
+
   
   const handleLogin =()=>{
     if (!regex.email.test(email)) {

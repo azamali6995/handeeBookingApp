@@ -105,7 +105,7 @@ const PendingOrderScreen = ({navigation, route}) => {
                 <Text style={{fontFamily:"Inter-Medium", fontSize:14, fontWeight:"500", color: selectedItem == index ? '#fff' : 'black'}}>Customer ID:</Text>
                 <Text style={{fontFamily:"Inter-Medium", fontSize:12, fontWeight:"500", color:selectedItem == index ? '#fff' : "#2591CA", marginTop:5}}>{item?.customerId}</Text>
              </View>
-               <Text style={{alignSelf:"center", color:selectedItem == index ? '#fff' : "#848484", fontFamily:"Inter-Regular", fontSize:12, fontWeight:"400",}}>{item?.pickedDate}</Text>
+               <Text style={{alignSelf:"center", color:selectedItem == index ? '#fff' : "#848484", fontFamily:"Inter-Regular", fontSize:12, fontWeight:"400",}}>{item?.pickedDate?.substring(0,10)}</Text>
              </View> 
 
             </View>

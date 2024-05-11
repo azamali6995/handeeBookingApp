@@ -12,7 +12,8 @@ import { boxPackingSlice } from '../slice/boxPacking'
 import { pakedMarkedByPakerSlice } from '../slice/packedMarkedByPaker'
 import { shippedMarkByShipperSlice } from '../slice/shippedMarkByShipper';
 import { getBoxPackingSlice } from '../slice/getBoxPackingList'
-
+import { completedOrdersSlice } from '../slice/completedOrder'
+import { dashboardStatusSlice } from '../slice/dashboradDetailStatus';
 
 const store = configureStore({
   reducer: {
@@ -28,8 +29,9 @@ const store = configureStore({
     boxPacking : boxPackingSlice.reducer,
     pakedMarkedByPaker : pakedMarkedByPakerSlice.reducer,
     shippedMarked: shippedMarkByShipperSlice.reducer,
-    getBoxlist : getBoxPackingSlice.reducer
-
+    getBoxlist : getBoxPackingSlice.reducer,
+    completed : completedOrdersSlice.reducer,
+    dashboard : dashboardStatusSlice.reducer
   },
 });
 

@@ -8,6 +8,7 @@ import { userLoginSelector } from '../../redux/slice/authSlice';
 import { userPickerSelector } from '../../redux/slice/pickerSlice';
 import { userPackerSelector } from '../../redux/slice/packerSlice';
 import { userShipperSelector } from '../../redux/slice/shipperSlice';
+import { dashboardStatus, dashboardStatusSelector } from '../../redux/slice/dashboradDetailStatus'
 import { userPicker , } from '../../redux/slice/pickerSlice';
 import { userPacker  } from '../../redux/slice/packerSlice';
 import { userShipper } from '../../redux/slice/shipperSlice';
@@ -25,7 +26,7 @@ const DashboradScreen = (props) => {
   const { userPickerFetching,  } = useSelector(userPickerSelector)
   const { userPackerFetching  } = useSelector(userPackerSelector)
   const { userShipperFetching  } = useSelector(userShipperSelector)
-
+  const { dashboardStatusPayload , dashboardStatusFetching } = useSelector(dashboardStatusSelector)
 
     useEffect(()=>{
         const handleGetUserInfo = async()=>{
@@ -44,28 +45,37 @@ const DashboradScreen = (props) => {
        handleGetUserInfo()
     },[])
 
-    const TotalOrder =[
-       {
-        packed : 'Orders Pending Fulfilment',
-        count : 456,
-        id:1
-       },
-       {
-        packed : 'Orders to be Packed',
-        count : 1253,
-        id:2
-       },
-       {
-        packed : 'Orders to be Shipped',
-        count : 1205,
-        id:3
-       },
-       {
-        packed : 'Shipped Orders',
-        count : 1253,
-        id:4
-       }        
-    ]
+    useEffect(()=>{
+      const dashboardStatusDetail = async()=>{
+        dispatch(dashboardStatus())
+     }
+     dashboardStatusDetail()
+  },[])
+
+  const TotalOrder = [
+    {
+      packed: 'Orders Pending Fulfilment',
+      count: dashboardStatusPayload?.pendingOrder || 0,
+      id: 1,
+    },
+    {
+      packed: 'Orders to be Packed',
+      count: dashboardStatusPayload?.toBePacked || 0,
+      id: 2,
+    },
+    {
+      packed: 'Orders to be Shipped',
+      count: dashboardStatusPayload?.toPeShipped || 0,
+      id: 3,
+    },
+    {
+      packed: 'Shipped Orders',
+      count: dashboardStatusPayload?.shippedOrder || 0,
+      id: 4,
+    },
+  ];
+
+    
     const data = [
         { label: 'Jan', value: 500 },
         { label: 'Feb', value: 312 },
@@ -80,7 +90,10 @@ const DashboradScreen = (props) => {
         { label: 'Nov', value: 689 },
         { label: 'Dec', value: 643 }
     ]
+
+   
     const handleOrderScreen =(item)=>{
+    
         // if(item?.id ==1){
         // props.navigation.navigate("PendingOrderScreen")
         // } else if(item?.id ==2){
@@ -109,8 +122,10 @@ const DashboradScreen = (props) => {
       backgroundColor="black"
       barStyle={'dark-content'}
     />
-    {userPickerFetching || userPackerFetching || userShipperFetching && 
+    { dashboardStatusFetching || userPickerFetching || userPackerFetching || userShipperFetching  || dashboardStatusFetching ?
       <LoadingPage />
+        :
+        null
       }
     <View style={{paddingHorizontal:10}}>
      <Header Left={true} Text={'Dashborad'} Right={true} Back={false} customNavigation={props?.navigation} />
@@ -125,11 +140,7 @@ const DashboradScreen = (props) => {
         keyExtractor={item => item.id}
         numColumns={2}
         renderItem={({item, index}) => (
-        <View 
-          // onPress={()=>handleOrderScreen(item)}
-              // style={{ height:176, width:184, margin:8, borderRadius:10, paddingHorizontal:10,paddingVertical:10, backgroundColor:"skyblue"}}
-              style={styles.item}
-              >
+        <View style={styles.item}>
                <View style={{flexDirection:"row", height:70, paddingTop:10 }}>
                   <View style={{width:"80%", }}>
                     <Text style={{fontFamily:"Inter-Medium", fontWeight:'500', fontSize:16, paddingHorizontal:7}}>

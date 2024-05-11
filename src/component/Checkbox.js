@@ -6,7 +6,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 const Checkbox = ({ isChecked, onToggle }) => {
   return (
   <BouncyCheckbox
-  size={14}
+  size={20}
   fillColor="#3DD617"
   unFillColor="#FFFFFF"
   iconStyle={{ borderColor: "#3DD617" }}

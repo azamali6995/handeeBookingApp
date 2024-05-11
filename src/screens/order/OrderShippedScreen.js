@@ -24,9 +24,11 @@ const OrderShippedScreen = (props) => {
 
   const [dropDown, setDropDown] = useState(true) 
   const [itemData, setItemData] = useState({})
+  const [boxData, setBoxData] = useState([])
 
   useEffect(()=>{ 
     setItemData(props?.route?.params?.item)
+    setBoxData(props?.route?.params?.item?.packingBoxDetailOutputDTOs)
   },[])
 
   useEffect(()=>{
@@ -40,7 +42,6 @@ const OrderShippedScreen = (props) => {
   }   
 
   const handleOrderAsShipped =()=>{
-    console.log('Add here')
     let body ={
       "inrernalId": route?.params?.item?.internalId
     }
@@ -82,7 +83,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "null" }
+                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "N/A" }
               </Text>
             </View>
   
@@ -104,7 +105,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.createdDate}
+                 {itemData?.createdDate?.substring(0,10)}
               </Text>
             </View>
   
@@ -126,7 +127,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.customerId ?  itemData?.customerId : "null" }
+                 {itemData?.customerId ?  itemData?.customerId : "N/A" }
               </Text>
             </View>
           </View>
@@ -150,7 +151,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.terms ?  itemData?.terms : "null" }
+                {itemData?.terms ?  itemData?.terms : "N/A" }
               </Text>
             </View>
   
@@ -172,7 +173,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.via ?  itemData?.via : "null" }
+                {itemData?.via ?  itemData?.via : "N/A" }
                
               </Text>
             </View>
@@ -195,7 +196,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.poNumber ?  itemData?.poNumber : "null" }
+                {itemData?.poNumber ?  itemData?.poNumber : "N/A" }
               </Text>
             </View>
           </View>
@@ -219,7 +220,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.shippedDate ? itemData?.shippedDate : "null" }
+                {itemData?.shippedDate ? itemData?.shippedDate?.substring(0,10) : "N/A" }
               </Text>
             </View>
   
@@ -241,7 +242,7 @@ const OrderShippedScreen = (props) => {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "null" }
+                {itemData?.toShippingAddress ? itemData?.toShippingAddress : "N/A" }
               </Text>
             </View>
           </View>
@@ -254,80 +255,88 @@ const OrderShippedScreen = (props) => {
           <View
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
           />
-          <FlatList
-            data={boxPackingPayload?.data}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={item => item.id}
-            ItemSeparatorComponent={() => {
-              return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
-            }}
-            renderItem={({item, index}) => (
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  flexDirection: 'row',
-                  height: 60,
-                  flex:1
-                }}>
-                <View style={{width: '30%'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-SemiBold',
-                      fontSize: 14,
-                      fontWeight: '600',
-                      color: '#2591CA',
-                    }}>
-                    1 Box
-                  </Text>
-                </View>
-
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      color: '#778B9D',
-                    }}>
-                    Dimension:
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      marginLeft: 3,
-                      color: '#2591CA',
-                    }}>
-                    {item?.Dimension}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      color: '#778B9D',
-                    }}>
-                    Dimension:
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 10,
-                      fontWeight: '500',
-                      marginLeft: 3,
-                      color: '#2591CA',
-                    }}>
-                    {item?.Weight}
-                  </Text>
-                </View>
+          <View style={{height:179}}>
+            {boxData?.length <= 0 ? 
+            <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>   
+              <Text style={styles.emptyText}>No Box againt this order</Text> 
               </View>
-            )}
-          />
+              :  
+              <FlatList
+                data={boxData}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => item.id}
+                ItemSeparatorComponent={() => {
+                  return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
+                }}
+                renderItem={({item, index}) => (
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 5,
+                      flexDirection: 'row',
+                      height: 60,
+                      flex:1
+                    }}>
+                    <View style={{width: '30%'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-SemiBold',
+                          fontSize: 14,
+                          fontWeight: '600',
+                          color: '#2591CA',
+                        }}>
+                        1 Box
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Height:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.height}
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Weight:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.weight}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              />
+            }
+            </View>
           <View
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
           />
@@ -449,45 +458,12 @@ const OrderShippedScreen = (props) => {
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
+                       
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 10,
                             color: '#778B9D',
-                          }}>
-                          Ship order:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.shipOrder ?? "N/A" }
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 15,
-                          }}>
-                          B/O NO:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.boNumber ?? "N/A" }
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            marginLeft: 15,
                           }}>
                           Shelf NO:{' '}
                         </Text>
@@ -502,32 +478,9 @@ const OrderShippedScreen = (props) => {
                       </View>
                     </View>
                   </View>
-                  <View style={{marginVertical: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#ABACAC',
-                      }}>
-                      {item?.description ?? "N/A" }
-                    </Text>
-                  </View>
+                  
   
-                  <View style={{flexDirection: 'row'}}>
-                    <Image
-                      source={require('../../assets/images/location.png')}
-                      resizeMode="contain"
-                      style={{height: 14, width: 14}}
-                    />
-                    {/* <Text
-                      style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 12,
-                        color: '#778B9D',
-                      }}>
-                      Lorem Ipsum is simply dummy text of the printing.
-                    </Text> */}
-                  </View>
+                  
                 </>
               )}
             />      
