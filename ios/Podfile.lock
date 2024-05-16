@@ -953,7 +953,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-safe-area-context (4.9.0):
+  - react-native-safe-area-context (4.10.1):
     - React-Core
   - React-nativeconfig (0.73.1)
   - React-NativeModulesApple (0.73.1):
@@ -1127,21 +1127,22 @@ PODS:
   - RNCCheckbox (0.5.17):
     - BEMCheckBox (~> 1.4)
     - React-Core
-  - RNGestureHandler (2.16.0):
+  - RNGestureHandler (2.16.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - RNPermissions (4.1.5):
     - React-Core
-  - RNReanimated (3.8.1):
+  - RNReanimated (3.11.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.30.1):
+  - RNScreens (3.31.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+    - React-RCTImage
   - RNSVG (14.1.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -1407,7 +1408,7 @@ SPEC CHECKSUMS:
   React-logger: e0c1e918d9588a9f39c9bc62d9d6bfe9ca238d9d
   React-Mapbuffer: 9731a0a63ebaf8976014623c4d637744d7353a7c
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
+  react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   React-nativeconfig: 37aecd26d64b79327c3f10e43b2e9a6c425e0a60
   React-NativeModulesApple: 9ca6d2eaa1dd5606588262195b46d0774bdec83a
   React-perflogger: 5ffc4d6ccb74eaac7b8b2867e58a447232483d6d
@@ -1430,10 +1431,10 @@ SPEC CHECKSUMS:
   ReactCommon: ddb128564dcbfa0287d3d1a2d10f8c7457c971f6
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
-  RNGestureHandler: 727b656d5a3fa247aac2c8cc70b8757356066451
+  RNGestureHandler: 48c9d38f57c7761b4153def57b718f491f4bbb4b
   RNPermissions: 3694106325667c02c4dad9d22a7d72ea615be2b9
-  RNReanimated: 3e23d4be380e295e504b7b3b3a357df60e1168a2
-  RNScreens: 77fc79e66b726ee45b091486b348418ee1d792ab
+  RNReanimated: 071599dab9e3769c03b84c984c87dc79087fef2f
+  RNScreens: 79c1020e7f52f4edde5ad96540f6e33c8b9b3b6c
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 2b33a7ac96c58cdaa7b810948fc6a2a76ed2d108

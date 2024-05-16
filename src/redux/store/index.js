@@ -14,6 +14,8 @@ import { shippedMarkByShipperSlice } from '../slice/shippedMarkByShipper';
 import { getBoxPackingSlice } from '../slice/getBoxPackingList'
 import { completedOrdersSlice } from '../slice/completedOrder'
 import { dashboardStatusSlice } from '../slice/dashboradDetailStatus';
+import { graphStaticsSlice } from '../slice/graphStatics'
+
 
 const store = configureStore({
   reducer: {
@@ -31,7 +33,8 @@ const store = configureStore({
     shippedMarked: shippedMarkByShipperSlice.reducer,
     getBoxlist : getBoxPackingSlice.reducer,
     completed : completedOrdersSlice.reducer,
-    dashboard : dashboardStatusSlice.reducer
+    dashboard : dashboardStatusSlice.reducer,
+    graphData : graphStaticsSlice.reducer
   },
 });
 

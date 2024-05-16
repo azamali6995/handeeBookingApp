@@ -12,6 +12,7 @@ import { dashboardStatus, dashboardStatusSelector } from '../../redux/slice/dash
 import { userPicker , } from '../../redux/slice/pickerSlice';
 import { userPacker  } from '../../redux/slice/packerSlice';
 import { userShipper } from '../../redux/slice/shipperSlice';
+import { graphStatics, graphStaticsSelector } from '../../redux/slice/graphStatics';
 
 import PieChartScreen from './chart/PieChartScreen';
 import BarChart from './chart/BarChart';
@@ -26,6 +27,7 @@ const DashboradScreen = (props) => {
   const { userPickerFetching,  } = useSelector(userPickerSelector)
   const { userPackerFetching  } = useSelector(userPackerSelector)
   const { userShipperFetching  } = useSelector(userShipperSelector)
+  const { graphStaticsFetching, graphStaticsPayload } = useSelector(graphStaticsSelector)
   const { dashboardStatusPayload , dashboardStatusFetching } = useSelector(dashboardStatusSelector)
 
     useEffect(()=>{
@@ -48,6 +50,7 @@ const DashboradScreen = (props) => {
     useEffect(()=>{
       const dashboardStatusDetail = async()=>{
         dispatch(dashboardStatus())
+        dispatch(graphStatics())
      }
      dashboardStatusDetail()
   },[])

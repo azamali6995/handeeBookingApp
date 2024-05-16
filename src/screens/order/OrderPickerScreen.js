@@ -32,7 +32,6 @@
     const [itemData, setItemData] = useState({})
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isChecked, setChecked] = useState(false);
-    const [ScanData, setScanData] = useState([])
     const [btnEnable, setBtnEnable] = useState(false)
 
     useEffect(()=>{ 

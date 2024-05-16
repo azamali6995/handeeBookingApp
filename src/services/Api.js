@@ -16,7 +16,8 @@ export const API = {
 
 
   completedOrders:() => request.get(`api/order/getCompletedOrderByUserId`),
-  dashboardStatus:() => request.get(`api/dashboard/getOrderByStatus`)
+  dashboardStatus:() => request.get(`api/dashboard/getOrderByStatus`),
+  graphStatics:() => request.get(`api/dashboard/getOrderGraph`)
 
 
 };

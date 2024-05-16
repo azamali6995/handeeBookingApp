@@ -39,126 +39,44 @@ import {
           {completedOrdersFetching  &&
             <LoadingPage />
           }
+      <Header Left={true} Text={'Orders Completed'} Right={true} Back={false} />      
+      {completedOrdersPayload?.length <= 0 ? 
+        <View style={{alignItems:'center', justifyContent:"center", flex:1 }}>
+          <Text style={styles.emptyText}>No order found</Text>
+        </View>
+      :
+      <FlatList
+        data={completedOrdersPayload}
+        keyExtractor={item => item.id}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item, index}) => (
+            <View>
+            <View style={{ borderWidth:2,borderRadius:15,  borderColor:"#2591CA", height:117, margin:6}}>
+             <View style={{height:58, justifyContent:"center", paddingHorizontal:15}}>
+             <Text style={{fontFamily:"Inter-Medium", fontSize:14, fontWeight:"500",}}>Order Number:</Text>
+              <Text style={{fontFamily:"Inter-Medium", fontSize:12, fontWeight:"500", color :"#2591CA",  marginTop:5}}>{item?.internalId}</Text>
+             </View>   
+             <View style={{height:50, flexDirection:"row", marginBottom:10, justifyContent:'space-between', paddingHorizontal:15}}>
+             <View>
+                <Text style={{fontFamily:"Inter-Medium", fontSize:14, fontWeight:"500", }}>
+                  Customer ID:
+                </Text>
+                <Text style={{fontFamily:"Inter-Medium", fontSize:12, fontWeight:"500", color: "#2591CA", marginTop:5}}>
+                  {item?.customerId}
+                </Text>
+             </View>
+               <Text style={{alignSelf:"center",  fontFamily:"Inter-Regular", fontSize:12, fontWeight:"400",}}>
+                 {item?.pickedDate?.substring(0,10)}
+               </Text>
+             </View> 
+            </View>
+            </View>
+        )}
+       />
+      }
 
-        <Header Left={true} Text={'Orders Completed'} Right={true} Back={false} />
-            {completedOrdersPayload[0]?.itemInOrderOutputDTOs?.length <= 0 ? 
-            
-             <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>   
-                <Text style={styles.emptyText}>No order found</Text> 
-              </View> 
-            :
-            <FlatList
-              data={completedOrdersPayload[0]?.itemInOrderOutputDTOs}
-              keyExtractor={item => item.id}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={() => {
-                return (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#CCCCCC',
-                      marginVertical: 10,
-                    }}
-                  />
-                );
-              }}
-              renderItem={({item, index}) => (
-                <>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      paddingHorizontal: 5,
-                      flexDirection: 'row',
-                    }}>
-                    <View style={{ marginVertical: 5}}>
-                      <Image
-                        source={require('../../assets/images/producticon.png')}
-                        style={{height: 87, width: 87}}
-                        resizeMode="contain"
-                      />
-                    </View>
-  
-                    <View style={{paddingHorizontal: 10,  }}>
-                    <View style={{ paddingRight:10,  marginVertical:3}}>
-                        <Text
-                        numberOfLines={2}
-                        ellipsizeMode='tail'
-                          style={{
-                            fontFamily: 'Inter-semiBold',
-                            fontSize: 14,
-                            color: '#2591CA',
-                          
-                          }}>
-                         {item?.description.substring(0, 30)} 
-                        </Text>
-                       
-                      </View>
-  
-                      <View style={{flexDirection: 'row', marginVertical: 3}}>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 13,
-                            color: '#778B9D',
-                          }}>
-                          Item No:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 14,
-                            color: '#2591CA',
-                          }}>
-                          {item?.itemId}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 13,
-                            color: '#778B9D',
-                            marginLeft: 15,
-                          }}>
-                          Qty:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 14,
-                            color: '#2591CA',
-                          }}>
-                          {item?.quantity}
-                        </Text>
-                      </View>
-  
-                      <View style={{flexDirection: 'row', marginVertical: 3}}>
-                        
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            color: '#778B9D',
-                            // marginLeft: 15,
-                          }}>
-                          Shelf NO:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 10,
-                            color: '#2591CA',
-                          }}>
-                          {item?.shelfNumber ?? "N/A" }
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  
-  
-                 
-                </>
-              )}
-            />  
-            }
+
+
       </View>
     );
   };
