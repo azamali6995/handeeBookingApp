@@ -56,6 +56,7 @@ const PendingOrderScreen = ({navigation, route}) => {
 
 
   const handleSelectedItem = (item, index)=>{
+    console.log("item", item)
 
     if(route.params?.pickerData?.roleId == 2){
        navigation.navigate("OrderPickerScreen",{item}) 

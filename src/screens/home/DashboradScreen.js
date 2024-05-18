@@ -1,7 +1,7 @@
 import { StyleSheet, Text, StatusBar, FlatList, Dimensions, TouchableOpacity, View, Image, ScrollView } from 'react-native'
 import { FlatGrid, SectionGrid } from 'react-native-super-grid';
 import { PieChart } from "react-native-chart-kit";
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../component/Header'
 import { useSelector , useDispatch } from 'react-redux';
 import { userLoginSelector } from '../../redux/slice/authSlice';
@@ -29,6 +29,33 @@ const DashboradScreen = (props) => {
   const { userShipperFetching  } = useSelector(userShipperSelector)
   const { graphStaticsFetching, graphStaticsPayload } = useSelector(graphStaticsSelector)
   const { dashboardStatusPayload , dashboardStatusFetching } = useSelector(dashboardStatusSelector)
+  const [ chartData, setChartData] = useState([10,10,10])
+ 
+
+  useEffect(() => {
+    if(graphStaticsPayload){
+      const { delieveredOrders, inProcessOrders, pendingOrders } = graphStaticsPayload;
+      setChartData([delieveredOrders, pendingOrders, inProcessOrders]);
+    }
+  }, [graphStaticsPayload]);
+
+
+  const sliceColorTem = [
+    {
+      color: '#FF0000',
+      order: 'Delievered Orders',
+    },
+    {
+      color: '#19E6F2',
+      order: 'Pending Orders',
+    },
+    {
+      color: '#C735F6',
+      order: 'InProcess Orders',
+    },
+   
+  ];
+
 
     useEffect(()=>{
         const handleGetUserInfo = async()=>{
@@ -79,34 +106,27 @@ const DashboradScreen = (props) => {
   ];
 
     
-    const data = [
-        { label: 'Jan', value: 500 },
-        { label: 'Feb', value: 312 },
-        { label: 'Mar', value: 424 },
-        { label: 'Apr', value: 745 },
-        { label: 'May', value: 89 },
-        { label: 'Jun', value: 434 },
-        { label: 'Jul', value: 650 },
-        { label: 'Aug', value: 980 },
-        { label: 'Sep', value: 123 },
-        { label: 'Oct', value: 186 },
-        { label: 'Nov', value: 689 },
-        { label: 'Dec', value: 643 }
+    // const data = [
+    //     { label: 'Jan', value: 500 },
+    //     { label: 'Feb', value: 312 },
+    //     { label: 'Mar', value: 424 },
+    //     { label: 'Apr', value: 745 },
+    //     { label: 'May', value: 89 },
+    //     { label: 'Jun', value: 434 },
+    //     { label: 'Jul', value: 650 },
+    //     { label: 'Aug', value: 980 },
+    //     { label: 'Sep', value: 123 },
+    //     { label: 'Oct', value: 186 },
+    //     { label: 'Nov', value: 689 },
+    //     { label: 'Dec', value: 643 }
+    // ]
+     const data = [
+        { label: 'Del', value: graphStaticsPayload?.delieveredOrders },
+        { label: 'Pen', value: graphStaticsPayload?.pendingOrders },
+        { label: 'InPro', value: graphStaticsPayload?.inProcessOrders },
     ]
 
-   
-    const handleOrderScreen =(item)=>{
-    
-        // if(item?.id ==1){
-        // props.navigation.navigate("PendingOrderScreen")
-        // } else if(item?.id ==2){
-        // props.navigation.navigate("PendingOrderScreen")
-        // }else if(item?.id ==3){
-        // props.navigation.navigate("PendingOrderScreen")    
-        // }else {
-        // props.navigation.navigate("PendingOrderScreen")    
-        // }
-      }
+  
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
@@ -136,7 +156,7 @@ const DashboradScreen = (props) => {
     <ScrollView 
     showsVerticalScrollIndicator={false}
     contentContainerStyle = {{flexGrow:1, }}>
-    <View style={{ paddingTop:10, }}>
+    <View style={{paddingTop:10}}>
     <FlatList
         data={TotalOrder}
         showsVerticalScrollIndicator={false}
@@ -187,7 +207,6 @@ const DashboradScreen = (props) => {
           round={100} 
           unit="€"
           chartConfig={chartConfig}
-
           />
       </View>    
 
@@ -205,8 +224,6 @@ const DashboradScreen = (props) => {
      </View>
     </View>        
     </ScrollView> 
-
-   
     </View>
   )
 }

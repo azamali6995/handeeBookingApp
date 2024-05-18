@@ -15,8 +15,6 @@ import SplashScreen from '../screens/auth/SplashScreen';
 import AllBoxesScreen from '../screens/boxs/AllBoxesScreen';
 import OrderCompleteScreen from '../screens/order/OrderCompleteScreen';
 
-
-
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 

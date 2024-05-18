@@ -18,6 +18,7 @@
   import Checkbox from '../../component/Checkbox';
   import { useFocusEffect } from '@react-navigation/native';
   import LoadingPage from '../../component/LoadingPage';
+  import {Menu} from 'react-native-paper'
 
   const OrderPickerScreen = (props) => {
     const {navigation, route} = props
@@ -33,6 +34,9 @@
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isChecked, setChecked] = useState(false);
     const [btnEnable, setBtnEnable] = useState(false)
+    const [outOfStockItem, setOutOfStockItem] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [openedMenuIndex, setOpenedMenuIndex] = useState(null);
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
@@ -80,6 +84,25 @@
       dispatch(pickedMarkByPickerList(body))
     }
 
+    const handleOpenMenu = (index) => {
+      setOpenedMenuIndex(index);
+      setVisible(true);
+    };
+
+  const handleMenuClose = () => {
+    setVisible(false);
+  };
+  const handleMenuItemPress = (action) => {
+    // Perform action based on selected menu item
+    if (action === 'delete') {
+      // Perform delete action
+    } else if (action === 'update') {
+      // Perform update action
+    }
+    setVisible(false);
+  };
+
+ 
 
     return (
       <View style={{flex: 1, paddingHorizontal:16,}}>
@@ -357,7 +380,8 @@
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
-                        <Text
+                       <View style={{width:"75%",alignItems:"center", flexDirection:"row", }}>
+                       <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 13,
@@ -390,8 +414,21 @@
                           }}>
                           {item?.quantity}
                         </Text>
+                       </View>  
+
+                         <View style={{alignItems:"flex-end", justifyContent:"center", height:30, width:30 }}>
+                          <Menu
+                            visible={openedMenuIndex === index && visible}
+                            onDismiss={handleMenuClose}
+                            anchor={
+                              <TouchableOpacity onPress={() => handleOpenMenu(index)}>
+                                <Image source={require('../../assets/images/dots.png')} style={{height:20,width:20}} /> 
+                              </TouchableOpacity>
+                            }>
+                            <Menu.Item onPress={() => handleMenuItemPress('delete')} title="Out of Stock" />
+                          </Menu>
+                          </View>                            
                       </View>
-  
                       <View 
                        style={{
                         flexDirection: 'row', 
@@ -435,7 +472,7 @@
             </View>
         </ScrollView>
 
-        {btnEnable && 
+        {/* {btnEnable &&  */}
         <View
           style={{
             paddingVertical: 10,
@@ -456,7 +493,7 @@
             loading={false}
           />
         </View>
-        }
+        {/* } */}
       </View>
     );
   };
