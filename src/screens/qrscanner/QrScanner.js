@@ -102,20 +102,16 @@ const QrScanner = ({navigation, route}) => {
   };
 
   const onSuccess = (e) => {
-    console.log("ScanData", e)
     try {
       if (e?.data) {
         handleBoxApi(e?.data);
       } 
-      // var decodedToken = jwt_decode(e.data);
-      // console.log("DecodedData", decodedToken);
     } catch (error) {
       setShowErrorModal(true);
     }
   };
 
   const handleBoxApi = (boxId) => {
-    console.log("boxId====>",boxId)
     // dispatch(boxScanning(boxId))
 
     dispatch(CountTotalScanning(boxId))

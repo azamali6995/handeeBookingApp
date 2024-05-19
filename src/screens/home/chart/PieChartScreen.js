@@ -11,8 +11,6 @@ const PieChartScreen = () => {
   const [chartData, setChartData] = useState([10,10,10])
   const { graphStaticsFetching, graphStaticsPayload } = useSelector(graphStaticsSelector)
 
-  console.log("graphStaticsPayload", graphStaticsPayload)
-
   useEffect(() => {
     if(graphStaticsPayload){
       const { delieveredOrders, inProcessOrders, pendingOrders } = graphStaticsPayload;

@@ -17,11 +17,7 @@ const DrawerItems = (props) => {
     const handleGetUserInfo = async()=>{
        await Local.getSession(result => {
         setUserInformation(result?.userInfo)
-
         let SortAccordingRoleId = result.userInfo?.data?.rolesOutputDTO?.sort((a, b)=> a.roleId - b.roleId) 
-
-        console.log("resulLesOutputDTO", SortAccordingRoleId)
-
         setRoleData(SortAccordingRoleId)  
     });
    }
@@ -32,10 +28,8 @@ const DrawerItems = (props) => {
     setShowDropdown(!showDropdown);
   };
   const handlePicker =(item)=>{
-    console.log("dataFrom", item)
     navigation.closeDrawer()
     navigation.navigate("PendingOrderScreen", {pickerData : item})
-
   }
   const handleShipped =(item)=>{
     navigation.closeDrawer()

@@ -16,7 +16,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 
 const PendingOrderScreen = ({navigation, route}) => {
- console.log("routerouterouteroute", route.params)
  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {userLoginFetching} = useSelector(userLoginSelector)
@@ -56,8 +55,6 @@ const PendingOrderScreen = ({navigation, route}) => {
 
 
   const handleSelectedItem = (item, index)=>{
-    console.log("item", item)
-
     if(route.params?.pickerData?.roleId == 2){
        navigation.navigate("OrderPickerScreen",{item}) 
     }else if(route.params?.packerData?.roleId == 3){

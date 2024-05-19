@@ -25,23 +25,23 @@
     const {qrScanningCount} = useSelector(state => state?.ScanningCount);
 
     const {pickedMarkByPickerListFetching, } = useSelector(pickedMarkByPickerListSelector)
-    console.log("state", pickedMarkByPickerListFetching)
-
-
     const dispatch = useDispatch();
-    const [dropDown, setDropDown] = useState(true) 
     const [itemData, setItemData] = useState({})
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isChecked, setChecked] = useState(false);
     const [btnEnable, setBtnEnable] = useState(false)
     const [outOfStockItem, setOutOfStockItem] = useState(null);
     const [visible, setVisible] = useState(false);
     const [openedMenuIndex, setOpenedMenuIndex] = useState(null);
+    const [ItemListData, setItemListData] = useState([])
+    const [inStockItemList, setInStockItemList] = useState([])
+    const [stockList, setStockList] = useState([])
 
     useEffect(()=>{ 
       setItemData(props?.route?.params?.item)
+      setItemListData(props?.route?.params?.item?.itemInOrderOutputDTOs)
     },[])
 
+    console.log("stockList", stockList)
 
     useFocusEffect(
       React.useCallback(() => {
@@ -53,9 +53,19 @@
 
     useFocusEffect(
       React.useCallback(() => {
-        if (itemData?.itemInOrderOutputDTOs?.length === qrScanningCount?.length) {
+        // {stockList?.length > 0 ?  stockList?.length == qrScanningCount?.length 
+        //   :
+        //   ItemListData?.length === qrScanningCount?.length
+        
+        // } 
+
+
+
+        if (stockList?.length > 0 &&  stockList?.length == qrScanningCount?.length) {
           setBtnEnable(true);
-        } else {
+        }else if(ItemListData?.length === qrScanningCount?.length) {
+          setBtnEnable(true);
+        }else  {
           setBtnEnable(false);
         }
 
@@ -76,9 +86,9 @@
         "pickerId": route.params?.item?.pickerId,
         "isPicked": true,
         "pickedDate": route.params?.item?.pickedDate,
-        "itemListDTOs" : route.params?.item?.itemInOrderOutputDTOs?.map((singleItem)=>({
+        "itemListDTOs" : ItemListData?.map((singleItem)=>({
           "itemId": singleItem?.orderId,
-          "quantityPicked": singleItem?.quantity
+          "quantityPicked": singleItem?.outOfStock == true ? 0 : singleItem?.quantity 
         }))
       }
       dispatch(pickedMarkByPickerList(body))
@@ -92,16 +102,32 @@
   const handleMenuClose = () => {
     setVisible(false);
   };
-  const handleMenuItemPress = (action) => {
-    // Perform action based on selected menu item
-    if (action === 'delete') {
-      // Perform delete action
-    } else if (action === 'update') {
-      // Perform update action
-    }
-    setVisible(false);
+ 
+  const handleMenuItemPress = (filterIndex, action) => {
+    let StockArry = []
+    const updatedItemData = 
+      ItemListData.map((val, index) => {
+        if (filterIndex === index) {
+          return {
+            ...val,
+            outOfStock: true
+          };
+        } else {
+          if(!val?.outOfStock){
+           console.log("AllValueofStock", val)
+           StockArry.push(val)
+          }
+          return val;
+        }
+      })
+      const inStockItems = updatedItemData.filter(item => !item.outOfStock);
+      // console.log("inStockItems=======>",inStockItems)
+      setInStockItemList(inStockItems)
+      setStockList(StockArry)
+      setItemListData(updatedItemData)
+      setVisible(false);
   };
-
+  
  
 
     return (
@@ -316,9 +342,8 @@
               </Text>
               
             </View>
-                {console.log("PickerItemslist", itemData)}
             <FlatList
-              data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
+              data={ItemListData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => {
@@ -366,12 +391,14 @@
 
                        <View style={{alignItems:"flex-end", paddingHorizontal:16, width:"30%",  }}>
                        <TouchableOpacity 
-                          style={{height:30, paddingRight:8, paddingLeft:17, flexDirection:"row",  borderRadius:7, backgroundColor:"#2591CA", alignItems:"center", justifyContent:"center", }}   
+                        disabled={item?.outOfStock==true ? true:false}
+                          style={{height:30, paddingRight:8, paddingLeft:17, flexDirection:"row",  borderRadius:7,
+                          backgroundColor: item?.outOfStock==true?"#808080":"#2591CA", alignItems:"center", justifyContent:"center", }}   
                           onPress={()=>handleBoxScan(item)}  >
                             <Image
                               source={require('../../assets/images/scan.png')}
                               resizeMode='contain'
-                              style={{height: 20, width: 20, tintColor : "white", marginRight:5 }} />
+                              style={{height: 20, width: 20, tintColor :"white", marginRight:5 }} />
                             <Text style={{fontFamily:'Inter-Regular', fontWeight:"400", color:'white', fontSize:10}}>Scan</Text>
                           </TouchableOpacity>
                        </View>   
@@ -425,7 +452,7 @@
                                 <Image source={require('../../assets/images/dots.png')} style={{height:20,width:20}} /> 
                               </TouchableOpacity>
                             }>
-                            <Menu.Item onPress={() => handleMenuItemPress('delete')} title="Out of Stock" />
+                            <Menu.Item onPress={() => handleMenuItemPress(index)} title="Out of Stock" />
                           </Menu>
                           </View>                            
                       </View>
@@ -472,7 +499,7 @@
             </View>
         </ScrollView>
 
-        {/* {btnEnable &&  */}
+        {btnEnable && 
         <View
           style={{
             paddingVertical: 10,
@@ -493,7 +520,7 @@
             loading={false}
           />
         </View>
-        {/* } */}
+        }
       </View>
     );
   };

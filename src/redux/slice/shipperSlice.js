@@ -43,7 +43,6 @@ export const userShipperSlice = createSlice({
     // ************ procedureConfigurations ******************
     builder
       .addCase(userShipper.fulfilled, (state, { payload }) => {
-        console.log("<======userShipper======>", payload?.data)
         state.userShipperPayload = payload.data;
         state.userShipperFetching = false;
         state.userShipperSuccess = true;

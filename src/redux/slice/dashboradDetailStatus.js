@@ -43,7 +43,6 @@ export const dashboardStatusSlice = createSlice({
     // ************ procedureConfigurations ******************
     builder
       .addCase(dashboardStatus.fulfilled, (state, { payload }) => {
-        console.log("<======dashboardStatus======>", payload?.data)
         state.dashboardStatusPayload = payload.data?.data;
         state.dashboardStatusFetching = false;
         state.dashboardStatusSuccess = true;

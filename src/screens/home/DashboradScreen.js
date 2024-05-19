@@ -18,9 +18,11 @@ import PieChartScreen from './chart/PieChartScreen';
 import BarChart from './chart/BarChart';
 import LoadingPage from '../../component/LoadingPage';
 import LocalStorage from '../../services/LocalStorage';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const DashboradScreen = (props) => {
+  const {navigation, routes} = props
   const dispatch = useDispatch();
   let Local = new LocalStorage()
   const { userLoginPayload, userLoginFetching } = useSelector(userLoginSelector)
@@ -32,30 +34,17 @@ const DashboradScreen = (props) => {
   const [ chartData, setChartData] = useState([10,10,10])
  
 
+  useEffect(()=>{
+    dispatch(dashboardStatus())
+    dispatch(graphStatics())
+  },[])
+
   useEffect(() => {
     if(graphStaticsPayload){
       const { delieveredOrders, inProcessOrders, pendingOrders } = graphStaticsPayload;
       setChartData([delieveredOrders, pendingOrders, inProcessOrders]);
     }
   }, [graphStaticsPayload]);
-
-
-  const sliceColorTem = [
-    {
-      color: '#FF0000',
-      order: 'Delievered Orders',
-    },
-    {
-      color: '#19E6F2',
-      order: 'Pending Orders',
-    },
-    {
-      color: '#C735F6',
-      order: 'InProcess Orders',
-    },
-   
-  ];
-
 
     useEffect(()=>{
         const handleGetUserInfo = async()=>{
@@ -74,13 +63,6 @@ const DashboradScreen = (props) => {
        handleGetUserInfo()
     },[])
 
-    useEffect(()=>{
-      const dashboardStatusDetail = async()=>{
-        dispatch(dashboardStatus())
-        dispatch(graphStatics())
-     }
-     dashboardStatusDetail()
-  },[])
 
   const TotalOrder = [
     {
@@ -106,24 +88,10 @@ const DashboradScreen = (props) => {
   ];
 
     
-    // const data = [
-    //     { label: 'Jan', value: 500 },
-    //     { label: 'Feb', value: 312 },
-    //     { label: 'Mar', value: 424 },
-    //     { label: 'Apr', value: 745 },
-    //     { label: 'May', value: 89 },
-    //     { label: 'Jun', value: 434 },
-    //     { label: 'Jul', value: 650 },
-    //     { label: 'Aug', value: 980 },
-    //     { label: 'Sep', value: 123 },
-    //     { label: 'Oct', value: 186 },
-    //     { label: 'Nov', value: 689 },
-    //     { label: 'Dec', value: 643 }
-    // ]
      const data = [
-        { label: 'Del', value: graphStaticsPayload?.delieveredOrders },
-        { label: 'Pen', value: graphStaticsPayload?.pendingOrders },
-        { label: 'InPro', value: graphStaticsPayload?.inProcessOrders },
+        { label: 'Del', value: graphStaticsPayload?.delieveredOrders?graphStaticsPayload?.delieveredOrders :0 },
+        { label: 'Pen', value: graphStaticsPayload?.pendingOrders?graphStaticsPayload?.pendingOrders:0 },
+        { label: 'InPro', value: graphStaticsPayload?.inProcessOrders?graphStaticsPayload?.inProcessOrders:0 },
     ]
 
   
@@ -133,9 +101,9 @@ const DashboradScreen = (props) => {
         backgroundGradientTo: "#08130D",
         backgroundGradientToOpacity: 0.5,
         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-        strokeWidth: 2, // optional, default 3
+        strokeWidth: 2, 
         barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
+        useShadowColorFromDataset: false 
     };  
      
   return (

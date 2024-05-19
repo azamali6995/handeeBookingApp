@@ -43,7 +43,6 @@ export const userPackerSlice = createSlice({
     // ************ procedureConfigurations ******************
     builder
       .addCase(userPacker.fulfilled, (state, { payload }) => {
-        console.log("<======userPacker======>", payload?.data)
         state.userPackerPayload = payload.data;
         state.userPackerFetching = false;
         state.userPackerSuccess = true;

@@ -9,10 +9,7 @@ export const graphStatics = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const data = await API.graphStatics(id);
-      console.log("first========>", data?.data?.data )
-
       if (data?.status == 200) {
-        console.log("first========>323", data?.data?.data )
         return data;
       } else {
         return thunkAPI.rejectWithValue(data);
