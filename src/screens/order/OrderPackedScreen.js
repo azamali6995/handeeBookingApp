@@ -68,7 +68,7 @@ import {
         "width": boxWidth,
         "height": boxheight,
         "weight": boxWeight,
-        // "length": boxLength,
+        "length": boxLength,
         "orderId": route?.params?.item?.internalId,
       }
       dispatch(boxPacking(body))
@@ -123,7 +123,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "N/A" }
+                 {itemData?.orderName ?  itemData?.orderName : "N/A" }
               </Text>
             </View>
   
@@ -213,7 +213,7 @@ import {
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.via ?  itemData?.via : "N/A" }
+                {itemData?.shipmethod ?  itemData?.shipmethod : "N/A" }
                
               </Text>
             </View>
@@ -310,9 +310,7 @@ import {
             </View>
             </View>
 
-            {/* <View
-              style={{borderWidth: 1, borderColor: '#CCCCCC', }}
-            /> */}
+           
             {isAddBox &&
             <View  style={{}}>
              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -473,7 +471,7 @@ import {
                       height: 60,
                       flex:1
                     }}>
-                    <View style={{width: '30%'}}>
+                    <View style={{width: '15%'}}>
                       <Text
                         style={{
                           fontFamily: 'Inter-SemiBold',
@@ -485,7 +483,7 @@ import {
                       </Text>
                     </View>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row', }}>
                       <Text
                         style={{
                           fontFamily: 'Inter-Medium',
@@ -506,6 +504,30 @@ import {
                         {item?.height}
                       </Text>
                     </View>
+                        
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Width:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.width}
+                      </Text>
+                    </View>
+
                     <View style={{flexDirection: 'row'}}>
                       <Text
                         style={{
@@ -526,7 +548,32 @@ import {
                         }}>
                         {item?.weight}
                       </Text>
-                    </View>
+                    </View>    
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Length:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {/* {item?.length} */}
+                        12
+                      </Text>
+                    </View>     
+
+
                   </View>
                 )}
               />
@@ -561,6 +608,8 @@ import {
               </TouchableOpacity>
             </View>
   
+            {console.log("itemDataitemDataitemData", itemData)}   
+
             <FlatList
               data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
               keyExtractor={item => item.id}
@@ -625,31 +674,12 @@ import {
                           }}>
                           {item?.itemId}
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 13,
-                            color: '#778B9D',
-                            marginLeft: 15,
-                          }}>
-                          Qty:{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-semibold',
-                            fontSize: 14,
-                            color: '#2591CA',
-                          }}>
-                          {item?.quantity}
-                        </Text>
-                      </View>
-  
-                      <View style={{flexDirection: 'row', marginVertical: 3}}>
                         
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
-                            fontSize: 10,
+                            fontSize: 13,
+                            marginLeft:10,
                             color: '#778B9D',
                             // marginLeft: 15,
                           }}>
@@ -658,10 +688,48 @@ import {
                         <Text
                           style={{
                             fontFamily: 'Inter-semibold',
-                            fontSize: 10,
+                            fontSize: 13,
                             color: '#2591CA',
                           }}>
                           {item?.shelfNumber ?? "N/A" }
+                        </Text>
+                      </View>
+  
+                      <View style={{flexDirection: 'row', marginVertical: 3}}>
+                       <Text
+                          style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 13,
+                            color: '#778B9D',
+                            // marginLeft: 15,
+                          }}>
+                         order qty:{' '}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-semibold',
+                            fontSize: 14,
+                            color: '#2591CA',
+                          }}>
+                          {item?.quantityOrdered}
+                        </Text>
+
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 13,
+                            color: '#778B9D',
+                            marginLeft: 10,
+                          }}>
+                         shiped qty:{' '}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-semibold',
+                            fontSize: 14,
+                            color: '#2591CA',
+                          }}>
+                          {item?.quantityShipped}
                         </Text>
                       </View>
                     </View>

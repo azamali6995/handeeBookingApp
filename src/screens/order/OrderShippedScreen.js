@@ -256,7 +256,7 @@ const OrderShippedScreen = (props) => {
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginTop: 15}}
           />
           <View style={{height:179}}>
-            {boxData?.length <= 0 ? 
+          {boxData?.length <= 0 ? 
             <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>   
               <Text style={styles.emptyText}>No Box againt this order</Text> 
               </View>
@@ -278,7 +278,7 @@ const OrderShippedScreen = (props) => {
                       height: 60,
                       flex:1
                     }}>
-                    <View style={{width: '30%'}}>
+                    <View style={{width: '15%'}}>
                       <Text
                         style={{
                           fontFamily: 'Inter-SemiBold',
@@ -290,7 +290,7 @@ const OrderShippedScreen = (props) => {
                       </Text>
                     </View>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row', }}>
                       <Text
                         style={{
                           fontFamily: 'Inter-Medium',
@@ -311,6 +311,30 @@ const OrderShippedScreen = (props) => {
                         {item?.height}
                       </Text>
                     </View>
+                        
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Width:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {item?.width}
+                      </Text>
+                    </View>
+
                     <View style={{flexDirection: 'row'}}>
                       <Text
                         style={{
@@ -331,11 +355,39 @@ const OrderShippedScreen = (props) => {
                         }}>
                         {item?.weight}
                       </Text>
-                    </View>
+                    </View>    
+
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          color: '#778B9D',
+                        }}>
+                        Length:
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 10,
+                          fontWeight: '500',
+                          marginLeft: 3,
+                          color: '#2591CA',
+                        }}>
+                        {/* {item?.length} */}
+                        12
+                      </Text>
+                    </View>     
+
+
                   </View>
                 )}
               />
             }
+
+
+
             </View>
           <View
             style={{borderWidth: 1, borderColor: '#CCCCCC', marginBottom: 15}}
@@ -345,7 +397,7 @@ const OrderShippedScreen = (props) => {
 
 
           <View style={{flex:1}}>
-             <View style={{flexDirection: 'row', paddingVetical:10, justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', paddingVetical:10, justifyContent: 'space-between'}}>
             <Text
               style={{
                 fontFamily: 'Inter-Bold',
@@ -401,24 +453,19 @@ const OrderShippedScreen = (props) => {
                     </View>
   
                     <View style={{paddingHorizontal: 10,  }}>
-                      <View style={{flexDirection: 'row', marginVertical:3}}>
+                    <View style={{ paddingRight:10,  marginVertical:3}}>
                         <Text
+                        numberOfLines={2}
+                        ellipsizeMode='tail'
                           style={{
                             fontFamily: 'Inter-semiBold',
                             fontSize: 14,
                             color: '#2591CA',
+                          
                           }}>
-                          Candy Box{' '}
+                         {item?.description.substring(0, 30)} 
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 10,
-                            marginTop: 2,
-                            color: '#778B9D',
-                          }}>
-                          (Scannaed Item 3){' '}
-                        </Text>
+                       
                       </View>
   
                       <View style={{flexDirection: 'row', marginVertical: 3}}>
@@ -438,14 +485,36 @@ const OrderShippedScreen = (props) => {
                           }}>
                           {item?.itemId}
                         </Text>
+                        
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
                             fontSize: 13,
+                            marginLeft:10,
                             color: '#778B9D',
-                            marginLeft: 15,
+                            // marginLeft: 15,
                           }}>
-                          Qty:{' '}
+                          Shelf NO:{' '}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-semibold',
+                            fontSize: 13,
+                            color: '#2591CA',
+                          }}>
+                          {item?.shelfNumber ?? "N/A" }
+                        </Text>
+                      </View>
+  
+                      <View style={{flexDirection: 'row', marginVertical: 3}}>
+                       <Text
+                          style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 13,
+                            color: '#778B9D',
+                            // marginLeft: 15,
+                          }}>
+                         order qty:{' '}
                         </Text>
                         <Text
                           style={{
@@ -453,37 +522,35 @@ const OrderShippedScreen = (props) => {
                             fontSize: 14,
                             color: '#2591CA',
                           }}>
-                          {item?.quantity}
+                          {item?.quantityOrdered}
                         </Text>
-                      </View>
-  
-                      <View style={{flexDirection: 'row', marginVertical: 3}}>
-                       
+
                         <Text
                           style={{
                             fontFamily: 'Inter-Regular',
-                            fontSize: 10,
+                            fontSize: 13,
                             color: '#778B9D',
+                            marginLeft: 10,
                           }}>
-                          Shelf NO:{' '}
+                         shiped qty:{' '}
                         </Text>
                         <Text
                           style={{
                             fontFamily: 'Inter-semibold',
-                            fontSize: 10,
+                            fontSize: 14,
                             color: '#2591CA',
                           }}>
-                          {item?.shelfNumber ?? "N/A" }
+                          {item?.quantityShipped}
                         </Text>
                       </View>
                     </View>
                   </View>
                   
   
-                  
+                 
                 </>
               )}
-            />      
+            />       
           </View>
 
         

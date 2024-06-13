@@ -41,7 +41,7 @@
       setItemListData(props?.route?.params?.item?.itemInOrderOutputDTOs)
     },[])
 
-    console.log("stockList", stockList)
+    console.log("stockList", pickedMarkByPickerListFetching)
 
     useFocusEffect(
       React.useCallback(() => {
@@ -51,16 +51,11 @@
       }, [])
     );
 
+  console.log("itemDataitemDataitemDataitemData", itemData?.itemInOrderOutputDTOs)
+
+
     useFocusEffect(
       React.useCallback(() => {
-        // {stockList?.length > 0 ?  stockList?.length == qrScanningCount?.length 
-        //   :
-        //   ItemListData?.length === qrScanningCount?.length
-        
-        // } 
-
-
-
         if (stockList?.length > 0 &&  stockList?.length == qrScanningCount?.length) {
           setBtnEnable(true);
         }else if(ItemListData?.length === qrScanningCount?.length) {
@@ -93,7 +88,6 @@
       }
       dispatch(pickedMarkByPickerList(body))
     }
-
     const handleOpenMenu = (index) => {
       setOpenedMenuIndex(index);
       setVisible(true);
@@ -163,7 +157,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                 {itemData?.oldOrderNumber ?  itemData?.oldOrderNumber : "N/A" }
+                 {itemData?.orderName ?  itemData?.orderName : "N/A" }
               </Text>
             </View>
   
@@ -253,7 +247,7 @@
                   fontWeight: '500',
                   color: '#2591CA',
                 }}>
-                {itemData?.via ?  itemData?.via : "N/A" }
+                {itemData?.shipmethod ?  itemData?.shipmethod : "N/A" }
                
               </Text>
             </View>
@@ -429,18 +423,18 @@
                             fontFamily: 'Inter-Regular',
                             fontSize: 13,
                             color: '#778B9D',
-                            marginLeft: 15,
+                            marginLeft:6
                           }}>
-                          Qty:{' '}
+                          Shelf NO:{' '}
                         </Text>
                         <Text
                           style={{
                             fontFamily: 'Inter-semibold',
-                            fontSize: 14,
+                            fontSize: 10,
                             color: '#2591CA',
                           }}>
-                          {item?.quantity}
-                        </Text>
+                          {item?.shelfNumber ? item?.shelfNumber?.substring(0, 3) :  "N/A"}
+                        </Text> 
                        </View>  
 
                          <View style={{alignItems:"flex-end", justifyContent:"center", height:30, width:30 }}>
@@ -468,22 +462,41 @@
                        <Text
                           style={{
                             fontFamily: 'Inter-Regular',
-                            fontSize: 10,
+                            fontSize: 13,
                             color: '#778B9D',
+                            // marginLeft: 15,
                           }}>
-                          Shelf NO:{' '}
+                         Order qty:{' '}
                         </Text>
                         <Text
                           style={{
                             fontFamily: 'Inter-semibold',
-                            fontSize: 10,
+                            fontSize: 14,
                             color: '#2591CA',
                           }}>
-                          {item?.shelfNumber?.substring(0, 3) ?? "N/A"}
+                          {item?.quantityOrdered ? item?.quantityOrdered : "N/A"}
+                        </Text>
+                       
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 13,
+                            color: '#778B9D',
+                            marginLeft: 15,
+                          }}>
+                          Ship qty:{' '}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'Inter-semibold',
+                            fontSize: 14,
+                            color: '#2591CA',
+                          }}>
+                          {item?.quantityShipped ? item?.quantityShipped : "N/A"}
                         </Text>
                       </View>   
                         
-                       <View style={{alignItems:"flex-end"}}>
+                       <View style={{alignItems:"flex-end", width:"20%",}}>
                         <Checkbox
                           isChecked={isChecked}
                           onToggle={() => {
