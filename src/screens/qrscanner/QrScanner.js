@@ -22,8 +22,8 @@ import { boxScanning } from "../../redux/slice/boxScanningSlice";
 import { CountTotalScanning } from '../../redux/slice/QrCodeSlice'
 
 
-const QrScanner = ({navigation, route}) => {
-
+const QrScanner = ({navigation, route}) => {  
+  console.log("first", route?.params)
   const [cameraPermissionDenied, setCameraPermissionDenied] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -104,22 +104,27 @@ const QrScanner = ({navigation, route}) => {
   const onSuccess = (e) => {
     try {
       if (e?.data) {
-        handleBoxApi(e?.data);
+        handleBoxApi(e?.data ,route?.params?.boxData);
       } 
     } catch (error) {
       setShowErrorModal(true);
     }
   };
 
-  const handleBoxApi = (boxId) => {
+  const handleBoxApi = (boxId,itemData) => {
     // dispatch(boxScanning(boxId))
-
-    dispatch(CountTotalScanning(boxId))
+    console.log("itemDataitemDataitemData", itemData)
+    console.log("itemDataitemDaboxId", boxId)
+    let finalPayload = {
+      boxId:boxId,
+      ...itemData
+    }
+    dispatch(CountTotalScanning(finalPayload))
     navigation.goBack()
   };
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+    <View style={{ flex: 1, alignItems:"center", justifyContent:"center", paddingHorizontal: 16 }}>
       <StatusBar
         translucent={true}
         backgroundColor="black"
@@ -167,6 +172,9 @@ const QrScanner = ({navigation, route}) => {
           </View>
         </View>
       </Modal>
+       
+
+
     </View>
   );
 };

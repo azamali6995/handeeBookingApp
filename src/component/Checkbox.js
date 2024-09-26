@@ -12,7 +12,7 @@ const Checkbox = ({ isChecked, onToggle }) => {
   iconStyle={{ borderColor: "#3DD617" }}
   innerIconStyle={{ borderWidth: 1 }}
   textStyle={{ fontFamily: "JosefinSans-Regular" }}
-  onPress={(isChecked: boolean) => {console.log(isChecked)}}
+  onPress={onToggle}
 />
   );
 };

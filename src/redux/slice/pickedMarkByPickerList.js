@@ -9,12 +9,14 @@ export const pickedMarkByPickerList = createAsyncThunk(
   async (body, thunkAPI) => {
     try {
       const data = await API.pickedMarkByPickerList(body);
+      console.log("ApiTest", data)
       if (data.status == 200) {
         return data;
       } else {
         return thunkAPI.rejectWithValue(data);
       }
     } catch (e) {
+      console.log("ApiErroCase", e)
       return thunkAPI.rejectWithValue(e.response.data);
     }
   },

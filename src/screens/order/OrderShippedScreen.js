@@ -43,7 +43,8 @@ const OrderShippedScreen = (props) => {
 
   const handleOrderAsShipped =()=>{
     let body ={
-      "inrernalId": route?.params?.item?.internalId
+      "inrernalId": route?.params?.item?.internalId,
+      "fulfillmentId":route?.params?.item?.fulfillmentId
     }
     dispatch(shippedMarkByShipper(body))
   }
