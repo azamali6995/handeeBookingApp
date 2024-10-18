@@ -59,8 +59,9 @@ import {
     const handleOrderAsShipped =()=>{
       let body ={
         "inrernalId": route?.params?.item?.internalId,
-        "fulfillmentId":route?.params?.item?.fulfillmentId
+        "fulfillmentId":route?.params?.item?.fulfilmentNumber
       }
+      console.log("Bosysdfasdfas", body)
       dispatch(pakedMarkedByPaker(body))
     }
 
@@ -85,7 +86,11 @@ import {
         if(boxPackingPayload?.httpStatusCode == 200){
           let id = route?.params?.item?.internalId
           dispatch(getBoxPacking(id))
+        }else{
+          let id = route?.params?.item?.internalId
+          dispatch(getBoxPacking(id)) 
         }
+
       }, [boxPackingPayload])
     );
 
@@ -458,7 +463,7 @@ import {
               <FlatList
                 data={getBoxPackingPayload}
                 showsVerticalScrollIndicator={false}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item?.id}
                 ItemSeparatorComponent={() => {
                   return <View style={{borderWidth: 1, borderColor: '#CCCCCC'}} />;
                 }}
@@ -608,12 +613,11 @@ import {
                 />
               </TouchableOpacity>
             </View>
-  
-            {console.log("itemDataitemDataitemData", itemData)}   
+
 
             <FlatList
-              data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
-              keyExtractor={item => item.id}
+              data={dropDown ? itemData?.itemInOrdersOutputDTOs : []}
+              keyExtractor={item => item?.id}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => {
                 return (

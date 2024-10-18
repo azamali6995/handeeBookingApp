@@ -99,11 +99,13 @@ console.log("itemDataitemDataitemDataitemData", itemData?.itemInOrderOutputDTOs)
       "itemListDTOs" : qrScanningCount?.map((singleItem)=>({
         "itemId": singleItem?.itemId,
         "itemInternalId": singleItem?.itemInternalId, 
-        "minQuantity":singleItem?.finalQuantity,
-        "quantityPicked": singleItem?.outOfStock == true ? 0 : singleItem?.quantity || 0,
-        
+        "quantityPicked":singleItem?.finalQuantity
       }))
     }
+
+     // "minQuantity":singleItem?.finalQuantity,
+        // "quantityPicked": singleItem?.outOfStock == true ? 0 : singleItem?.quantity || 0,
+        
     console.log("bodybodybodybody", body)
     dispatch(pickedMarkByPickerList(body))
   }
@@ -127,7 +129,6 @@ const handleMenuItemPress = (filterIndex, action) => {
         };
       } else {
         if(!val?.outOfStock){
-         console.log("AllValueofStock", val)
          StockArry.push(val)
         }
         return val;

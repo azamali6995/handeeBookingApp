@@ -28,8 +28,10 @@ const OrderShippedScreen = (props) => {
 
   useEffect(()=>{ 
     setItemData(props?.route?.params?.item)
-    setBoxData(props?.route?.params?.item?.packingBoxDetailOutputDTOs)
+    console.log("Shipped", props?.route?.params?.item)
+    setBoxData(props?.route?.params?.item?.packingBoxesDetailOutputDTOs)
   },[])
+
 
   useEffect(()=>{
     if(shippedMarkByShipperFetching == true){
@@ -43,9 +45,13 @@ const OrderShippedScreen = (props) => {
 
   const handleOrderAsShipped =()=>{
     let body ={
-      "inrernalId": route?.params?.item?.internalId,
-      "fulfillmentId":route?.params?.item?.fulfillmentId
+      "internalId": route?.params?.item?.internalId,
+      "fulfillmentId":route?.params?.item?.fulfilmentNumber
     }
+    
+
+
+    console.log("paasdfasdfsad", body)
     dispatch(shippedMarkByShipper(body))
   }
 
@@ -423,7 +429,7 @@ const OrderShippedScreen = (props) => {
           </View>
 
           <FlatList
-              data={ dropDown ? itemData?.itemInOrderOutputDTOs : []}
+              data={ dropDown ? itemData?.itemInOrdersOutputDTOs : []}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => {

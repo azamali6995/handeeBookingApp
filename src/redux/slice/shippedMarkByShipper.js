@@ -9,7 +9,7 @@ export const shippedMarkByShipper = createAsyncThunk(
   async (body, thunkAPI) => {
     try {
       const data = await API.shippedMarkByShipper(body);
-      console.log("datadatadata", data?.data?.httpStatusCode)
+      console.log("datadatadata", data?.data)
       if (data?.data?.httpStatusCode == 200) {
         console.log("first========>")
         return data;

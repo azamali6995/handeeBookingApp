@@ -53,7 +53,6 @@ const PendingOrderScreen = ({navigation, route}) => {
     }
   }
 
-
   const handleSelectedItem = (item, index)=>{
     if(route.params?.pickerData?.roleId == 2){
        navigation.navigate("OrderPickerScreen",{item}) 
@@ -78,7 +77,6 @@ const PendingOrderScreen = ({navigation, route}) => {
     }
 
       <Header Left={true} Text={'All Orders'} Right={true} Back={false} />
-      
       <View style={{ flex:1 ,paddingVertical:10 }}>
       {allOrder?.length <= 0 ? 
         <View style={{alignItems:'center', justifyContent:"center", flex:1 }}>
@@ -87,7 +85,7 @@ const PendingOrderScreen = ({navigation, route}) => {
       :
       <FlatList
         data={allOrder}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item?.id}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => (
             <TouchableOpacity
