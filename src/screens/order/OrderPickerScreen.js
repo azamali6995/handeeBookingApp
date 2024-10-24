@@ -50,7 +50,17 @@ const OrderPickerScreen = (props) => {
     }, [])
   );
 
-console.log("itemDataitemDataitemDataitemData", itemData?.itemInOrderOutputDTOs)
+console.log("itemDataitemDataitemDataitemData", qrScanningCount)
+
+
+useEffect(()=>{ 
+  let finalPayload = {
+    type: "reset",
+  }
+
+  dispatch(CountTotalScanning(finalPayload))
+},[])
+
 
 
   useFocusEffect(
@@ -75,22 +85,6 @@ console.log("itemDataitemDataitemDataitemData", itemData?.itemInOrderOutputDTOs)
   }
 
   const handlePickerList =()=>{
-    console.log("SelectedItem", ItemListData)
-    // let body ={
-    //   "orderId": route.params?.item?.internalId,
-    //   "pickerId": route.params?.item?.pickerId,
-    //   "isPicked": true,
-    //   "pickedDate": route.params?.item?.pickedDate,
-    //   "itemListDTOs" : ItemListData?.map((singleItem)=>({
-    //     "itemId": singleItem?.orderId,
-    //     "itemInternalId": singleItem?.itemInternalId, 
-    //     "quantityPicked": singleItem?.outOfStock == true ? 0 : singleItem?.quantity,
-        
-    //   }))
-    // }
-
-    //newPayload 
-    
     let body ={
       "orderId": route.params?.item?.internalId,
       "pickerId": route.params?.item?.pickerId,
@@ -102,13 +96,9 @@ console.log("itemDataitemDataitemDataitemData", itemData?.itemInOrderOutputDTOs)
         "quantityPicked":singleItem?.finalQuantity
       }))
     }
-
-     // "minQuantity":singleItem?.finalQuantity,
-        // "quantityPicked": singleItem?.outOfStock == true ? 0 : singleItem?.quantity || 0,
-        
-    console.log("bodybodybodybody", body)
     dispatch(pickedMarkByPickerList(body))
   }
+  
   const handleOpenMenu = (index) => {
     setOpenedMenuIndex(index);
     setVisible(true);
@@ -143,10 +133,11 @@ const handleMenuItemPress = (filterIndex, action) => {
 };
 
 
-const handleApiCalling = (boxId,itemData) => {
+const handleApiCalling = (boxId,itemData, isChecked) => {
   setChecked(!isChecked);
   // dispatch(boxScanning(boxId))
   let finalPayload = {
+    type: "check",
     boxId:boxId,
     ...itemData
   }
@@ -155,6 +146,16 @@ const handleApiCalling = (boxId,itemData) => {
   // navigation.goBack()
 };
 
+
+const checkedOrNot = (orderId)=>{
+  let currentCheckedOrnot = qrScanningCount.find((value,index)=>value.orderId ===orderId );
+  if(currentCheckedOrnot){
+    return true
+  }
+  else{
+    return false
+  }
+}
 
   return (
     <View style={{flex: 1, paddingHorizontal:16,}}>
@@ -529,12 +530,17 @@ const handleApiCalling = (boxId,itemData) => {
                     </View>   
                       
                      <View style={{alignItems:"flex-end", justifyContent:"flex-end", width:"9%",}}>
+                     
+                     {
+                      item.outOfStock !== true &&  
                       <Checkbox
-                        isChecked={isChecked}
+                        // isChecked={isChecked}
+                        isChecked={checkedOrNot(item?.orderId)}
                         onToggle={() => {
-                          handleApiCalling( item?.itemId , item)
+                          handleApiCalling( item?.itemId , item , isChecked)
                         }}
-                      />
+                      />}
+
                       </View>
                     </View>
                   </View>

@@ -9,7 +9,6 @@ export const pickedMarkByPickerList = createAsyncThunk(
   async (body, thunkAPI) => {
     try {
       const data = await API.pickedMarkByPickerList(body);
-      console.log("ApiTest", data)
       if (data.status == 200) {
         return data;
       } else {

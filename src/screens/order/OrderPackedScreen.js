@@ -90,7 +90,6 @@ import {
           let id = route?.params?.item?.internalId
           dispatch(getBoxPacking(id)) 
         }
-
       }, [boxPackingPayload])
     );
 
